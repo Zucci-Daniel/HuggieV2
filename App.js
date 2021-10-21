@@ -1,9 +1,26 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import InsideApp from './APP/APP_NAVIGATION/InsideApp';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native';
+//redux imports
+import { createStore, applyMiddleware, compose } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import reducer from './APP/Redux/Reducers/reducer';
+import MainScreen from './APP/SCREENS/MainScreen';
 
-export default function App() {
+/////////////    redux settings     ///////////////////
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE || compose;
+
+const store = createStore(
+  reducer,
+  composeEnhancers(
+    applyMiddleware(thunk)
+  )
+)
+//////////////    redux settings     /////////////////
+
+const App = () => {
+
   return (
     <Provider store={store}>
       <MainScreen />
@@ -17,4 +34,4 @@ const styles=StyleSheet.create({
   }
 })
 
-const styles = StyleSheet.create({});
+export default App;
