@@ -14,27 +14,11 @@ const Stack = createNativeStackNavigator();
 
 export default function SentRequestNav() {
 
-
-
-
-
     return (
         <Stack.Navigator >  
          <Stack.Screen name="SentRequests" component={SentRequestScreen} 
           options={{ headerShown: true, header: ({ navigation }) => <NormalHeader screenTitle="Sent Requests" /> }}
        />
-
-         {/* <Stack.Screen name="Chats" component={ChatScreen} 
-          options={({ route,navigation }) => ({
-            header: () => <ChatHeader screenTitle={route.params.thisUser}
-              screenImage={route.params.thisUserImage} onPress={() => navigation.pop()} 
-              options={({ route }) => ({
-                header: () => <ChatHeader screenTitle={route.params.thisUser}
-                  screenImage={route.params.thisUserImage} onPress={() => navigation.goBack('SentRequest')} />,
-              })}
-              />,
-          })}
-         />    */}
      </Stack.Navigator>
     )
 }

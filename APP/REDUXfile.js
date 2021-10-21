@@ -1,13 +1,10 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native';
-
-
 //redux imports
 import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import reducer from './APP/Redux/Reducers/reducer';
-
 import MainScreen from './APP/SCREENS/MainScreen';
 
 /////////////    redux settings     ///////////////////

@@ -23,7 +23,7 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
     eitherMessage:{
         flex: 1,
-        backgroundColor:colors.dark,
+        backgroundColor:colors.white,
         width:'100%'
     }
 })
