@@ -23,11 +23,8 @@ const App = () => {
 
   return (
     <Provider store={store}>
-        {/* <GestureHandlerRootView style={styles.GestureHandlerRootView}> */}
-        <MainScreen />
-    {/* </GestureHandlerRootView> */}
-      </Provider>
-
+      <MainScreen />
+    </Provider>
   )
 };
 
