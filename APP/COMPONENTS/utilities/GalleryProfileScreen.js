@@ -11,6 +11,7 @@ import LogoutBtn from './LogoutBtn';
 import SelectBox from './SelectBox';
 import LoadingScreen from '../loadingScreen';
 import EmptyProfilePic from './EmptyProfilePic';
+import DetailsContainer from './DetailsContainer';
 
 const width = Dimensions.get('screen').width;
 
@@ -20,6 +21,7 @@ export default function GalleryProfilePictureScreen({ setConfigLoading }) {
         level: '100L',
         department: 'Computer Science',
         institution: 'Imo state university',
+        description: 'I am a 300L student at Imo state university',
         attribute_1: '',
         attribute_2: '',
         attribute_3: '',
@@ -129,6 +131,7 @@ export default function GalleryProfilePictureScreen({ setConfigLoading }) {
                 }
             </View>
             <UserShowCaseInitials username={userData.user.username} dept={userData.institution} level={userData.level} />
+            <DetailsContainer description={userData.description} />
             <View style={styles.likesContainer}>
                 {!editable ? div : newDiv}
                 <TouchableWithoutFeedback onPress={!editable ? onClick : submit}>
@@ -143,9 +146,10 @@ export default function GalleryProfilePictureScreen({ setConfigLoading }) {
     return (
         <ScrollView >
             <View style={styles.GalleryProfilePicture}>
-                {!userData ? <LoadingScreen /> : container }
+                {container}
                 <LogoutBtn />
             </View>
+            {loading ? <LoadingScreen /> : null}
         </ScrollView>
     )
 };
