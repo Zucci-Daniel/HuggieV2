@@ -9,7 +9,7 @@ function DetailsContainer({description}) {
                 <Text>{description}</Text>
             </View>
             <View style={styles.iconContainer}>
-                <IonicIcons name='pencil' color='#000' size={15} />
+                <IonicIcons name='pencil' color='#000' size={16} />
             </View>
         </View>
     );
