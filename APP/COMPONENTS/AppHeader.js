@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { Children } from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import colors from '../config/colors';
 import Logo from '../ASSETS/Huggie.svg';
 import { scale, ScaledSheet } from 'react-native-size-matters';
 
 
-export default function AppHeader() {
+export default function AppHeader({children}) {
     return (
         <View style={styles.AppHeader}>
-            {/* <Logo style={styles.huggie} /> */}
+            <Logo style={styles.huggie} />
+            {children}
         </View>
     )
 }
