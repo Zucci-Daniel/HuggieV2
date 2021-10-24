@@ -5,7 +5,7 @@ import BubbleBorder from './BubbleBorder'
 export default function BubbleImage({picture}) {
     return (
         <View style={styles.imageWrapper}>
-          <Image style={styles.image} source={picture?picture:require('../../ASSETS/girl.jpg')} />
+          <Image resizeMode='cover' style={styles.image} source={picture?picture:require('../../ASSETS/girl.jpg')} />
           </View>
     )
 }

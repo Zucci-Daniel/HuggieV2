@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback,useEffect} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -14,6 +14,7 @@ import CompleteHotScreen from './CompleteHotScreen';
 import {scale, ScaledSheet} from 'react-native-size-matters';
 import Icons2 from 'react-native-vector-icons/FontAwesome5';
 import DateButton from '../COMPONENTS/DateButton';
+//gestures
 import {
   TapGestureHandler,
   RotationGestureHandler,
@@ -26,11 +27,32 @@ import Animated, {
 
 const cards = [
   {
-    username: 'Purity Uchegbu',
+    username: 'Rose Naka',
     level: 400,
     department: 'Finance',
-    source: require('../ASSETS/11.jpg'),
+    source: require('../ASSETS/bw.jpg'),
     likes: ['eating', 'smoking', 'riding', 'laughing'],
+    gallery: [
+      {
+        source: require('../ASSETS/bw.jpg'),
+      },
+      {
+        source: require('../ASSETS/bw.jpg'),
+      },
+      {
+        source: require('../ASSETS/bw.jpg'),
+      },
+      {
+        source: require('../ASSETS/bw.jpg'),
+      },
+      {
+        source: require('../ASSETS/bw.jpg'),
+      },
+      {
+        source: require('../ASSETS/bw.jpg'),
+      },
+    ],
+    verified: true,
   },
   {
     username: 'Princess Ebere',
@@ -38,7 +60,29 @@ const cards = [
     department: 'Computer Science',
     source: require('../ASSETS/9.jpg'),
     likes: ['making friends', 'singing', 'act', 'shouting'],
+    gallery: [
+      {
+        source: require('../ASSETS/9.jpg'),
+      },
+      {
+        source: require('../ASSETS/9.jpg'),
+      },
+      {
+        source: require('../ASSETS/9.jpg'),
+      },
+      {
+        source: require('../ASSETS/9.jpg'),
+      },
+      {
+        source: require('../ASSETS/9.jpg'),
+      },
+      {
+        source: require('../ASSETS/9.jpg'),
+      },
+    ],
+    verified: false,
   },
+
   {
     username: 'Angel Jopet',
     level: 200,
@@ -46,7 +90,29 @@ const cards = [
     source: require('../ASSETS/8.jpg'),
 
     likes: ['fighting', 'talking', 'yoga'],
+    gallery: [
+      {
+        source: require('../ASSETS/8.jpg'),
+      },
+      {
+        source: require('../ASSETS/8.jpg'),
+      },
+      {
+        source: require('../ASSETS/8.jpg'),
+      },
+      {
+        source: require('../ASSETS/8.jpg'),
+      },
+      {
+        source: require('../ASSETS/8.jpg'),
+      },
+      {
+        source: require('../ASSETS/8.jpg'),
+      },
+    ],
+    verified: true,
   },
+
   {
     username: 'Sasha Huncho',
     level: 300,
@@ -54,7 +120,29 @@ const cards = [
     source: require('../ASSETS/14.jpg'),
 
     likes: ['foodie', 'migos', 'attitude', 'laughing'],
+    gallery: [
+      {
+        source: require('../ASSETS/14.jpg'),
+      },
+      {
+        source: require('../ASSETS/14.jpg'),
+      },
+      {
+        source: require('../ASSETS/14.jpg'),
+      },
+      {
+        source: require('../ASSETS/14.jpg'),
+      },
+      {
+        source: require('../ASSETS/14.jpg'),
+      },
+      {
+        source: require('../ASSETS/14.jpg'),
+      },
+    ],
+    verified: true,
   },
+
   {
     username: 'Pretty Nnaji',
     level: 300,
@@ -62,35 +150,68 @@ const cards = [
     source: require('../ASSETS/15.jpg'),
 
     likes: ['foodie', 'korean'],
+    gallery: [
+      {
+        source: require('../ASSETS/15.jpg'),
+      },
+      {
+        source: require('../ASSETS/15.jpg'),
+      },
+      {
+        source: require('../ASSETS/15.jpg'),
+      },
+      {
+        source: require('../ASSETS/15.jpg'),
+      },
+      {
+        source: require('../ASSETS/15.jpg'),
+      },
+      {
+        source: require('../ASSETS/15.jpg'),
+      },
+    ],
+    verified: false,
   },
 ];
 
-
-
 export default function HotlistsScreen() {
-
-  const AnimatedView = Animated.createAnimatedComponent(View)
+  const AnimatedView = Animated.createAnimatedComponent(View);
 
   const scale = useSharedValue(0);
+  const scale2 = useSharedValue(0);
 
   const rStyle = useAnimatedStyle(() => ({
     transform: [{scale: Math.max(scale.value, 0)}],
-    display:'flex'
+    display: 'flex',
+  }));
+  const tipStyle = useAnimatedStyle(() => ({
+    display: 'flex',
+    opacity: Math.max(scale2.value, 15)
   }));
 
-  const onDoubleTap = useCallback(() => {
+  const showSentAnimation = useCallback(() => {
     scale.value = withSpring(1, undefined, isFinished => {
       if (isFinished) {
         scale.value = withSpring(0);
       }
-    });
-    console.log('working');
-  });
+    })})
+  const showTipAnimation = useCallback(() => {
+    scale2.value = withSpring(6, undefined, isFinished => {
+      if (isFinished) {
+        scale2.value = withSpring(0);
+      }
+    })})
+
+
+    useEffect(() => {
+    showTipAnimation()
+    }, [])
 
   const returnScrollView = () => {
     return (
-      <TapGestureHandler numberOfTaps={2} onActivated={onDoubleTap}>
+      <TapGestureHandler numberOfTaps={2} onActivated={showSentAnimation}>
         <Animated.View>
+          {/* <AnimatedView style={[styles.ViewTip, tipStyle]}><Text>DO SOMETHING</Text></AnimatedView> */}
           <AnimatedView style={[styles.ViewIcon, rStyle]}>
             <DateButton
               extraStyle={styles.centerIcon}
@@ -107,10 +228,13 @@ export default function HotlistsScreen() {
             {cards.map((users, index) => (
               <View key={index} style={styles.wrapper}>
                 <CompleteHotScreen
+                  verified={users.verified}
+                  useThisGallery={users.gallery}
                   username={users.username}
                   image={users.source}
                   level={users.level}
-                  dept={users.department}>
+                  dept={users.department}
+                  onPressDateButton={showSentAnimation}>
                   {users.likes.map((like, index) => (
                     <SelectBox key={like + index * Math.random} likes={like} />
                   ))}
@@ -143,26 +267,33 @@ const styles = StyleSheet.create({
     height: CARD_HEIGHT,
     width: CARD_WIDTH,
   },
-  heartWrapper: {
-    backgroundColor: 'green',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    left: 0,
-  },
   ViewIcon: {
-    display:'none',
+    display: 'none',
     height: 200,
-    width:scale(150),
+    width: scale(150),
     // backgroundColor: 'white',
     position: 'absolute',
     top: CARD_HEIGHT / 4,
     bottom: 0,
-    right: Dimensions.get('window').width /4,
+    right: Dimensions.get('window').width / 4,
     // left: scale(70),
     zIndex: 7,
-    justifyContent: "center",
+    justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
+  ViewTip: {
+    display: 'none',
+    height: scale(50),
+    // width:'90%',
+    backgroundColor: 'red',
+    position: 'absolute',
+    top:0,
+    bottom: 0,
+    right: scale(10),
+    left: scale(10),
+    zIndex: 7,
+    justifyContent: 'center',
+    alignItems: 'center',
+    opacity:0
+  },
 });

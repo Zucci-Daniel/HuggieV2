@@ -2,9 +2,9 @@ import React from 'react'
 import { StyleSheet, TouchableNativeFeedback, View } from 'react-native'
 import colors from '../../config/colors'
 
-export default function RedLight({extraStyle}) {
+export default function RedLight({extraStyle,onPress}) {
     return (
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback onPress={onPress}>
         <View style={[styles.redLight,extraStyle]}>
         </View>
         </TouchableNativeFeedback>

@@ -36,7 +36,7 @@ export default function InsideApp() {
         <BottomTab.Navigator
           screenOptions={({route}) => ({
             title: '',
-            header: ({navigation}) => <AppHeader><Text onPress={()=>navigation.navigate('MyProfileNav')}>My Profile</Text></AppHeader>,
+            header: ({navigation}) => <AppHeader></AppHeader>,
             tabBarStyle: [
               {
                 ...styles.BottomBarStyles,
@@ -125,12 +125,11 @@ const HEIGHT = Dimensions.get('window').height * 0.09;
 const styles = ScaledSheet.create({
   BottomBarStyles: {
     borderTopWidth: 0,
-    backgroundColor: 'transparent',
+    backgroundColor: colors.white,
     position: 'absolute',
     right: 0,
     left: 0,
-    bottom: '1@s',
-    borderRadius: '15@s',
+    bottom: 0,
     height: HEIGHT,
     justifyContent: 'center',
     alignItems: 'center',
