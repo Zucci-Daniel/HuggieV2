@@ -30,8 +30,6 @@ const styles = StyleSheet.create({
         color:colors.white,
         padding:5,
         flexDirection:'row',
-        position:'absolute',
-        bottom:0
     },
     firstPane:{
         width:'90%',

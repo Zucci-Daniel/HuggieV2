@@ -12,12 +12,14 @@ export default function ProfileDisplay({
   children,
   innerRef,
   extraStyles,
+  verified
 }) {
   return (
     <View style={[styles.ProfileDisplay, extraStyles]}>
       <View style={styles.Display}>
         <Image source={image} style={styles.image} ref={innerRef} />
         <UserShowCaseInitials
+        verified={verified}
           username={username}
           dept={dept}
           level={level}
@@ -35,11 +37,9 @@ const CARD_HEIGHT2 = Dimensions.get('window').height;
 
 const styles = ScaledSheet.create({
   ProfileDisplay: {
-    height: '80%',
-    marginTop: scale(10),
     position: 'relative',
     padding: 0,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.white,
   },

@@ -2,11 +2,11 @@ import React from 'react'
 import { StyleSheet, TouchableNativeFeedback, View } from 'react-native'
 import colors from '../../config/colors'
 
-export default function GreenLight() {
+export default function GreenLight({onPress,extraFadedStyle,extraGreenLightStyle}) {
     return (
-        <TouchableNativeFeedback>
-        <View style={styles.greenlightFaded}>    
-        <View style={styles.greenlight}>    
+        <TouchableNativeFeedback  onPress={onPress}>
+        <View style={[styles.greenlightFaded,extraFadedStyle]}>    
+        <View style={[styles.greenlight,extraGreenLightStyle]}>    
         </View>
         </View>
         </TouchableNativeFeedback>

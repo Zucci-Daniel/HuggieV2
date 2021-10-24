@@ -36,7 +36,7 @@ export default function InsideApp() {
         <BottomTab.Navigator
           screenOptions={({route}) => ({
             title: '',
-            header: ({navigation}) => <AppHeader><Text onPress={()=>navigation.navigate('MyProfileNav')}>My Profile</Text></AppHeader>,
+            header: ({navigation}) => <AppHeader></AppHeader>,
             tabBarStyle: [
               {
                 ...styles.BottomBarStyles,
@@ -54,7 +54,7 @@ export default function InsideApp() {
                   <Icons
                     name="ios-heart-sharp"
                     color={focused ? colors.white : colors.brandColor}
-                    size={focused ? scale(30) : size}
+                    size={focused ? scale(20) : size}
                     style={focused ? styles.iconFocused : styles.iconUnFocused}
                   />
                 </View>
@@ -71,7 +71,7 @@ export default function InsideApp() {
                   <Icons
                     name="ios-chatbubbles"
                     color={focused ? colors.white : colors.brandColor}
-                    size={focused ? scale(30) : size}
+                    size={focused ? scale(20) : size}
                     style={focused ? styles.iconFocused : styles.iconUnFocused}
                   />
                 </View>
@@ -87,7 +87,7 @@ export default function InsideApp() {
                   <Icons2
                     name="grin-hearts"
                     color={focused ? colors.white : colors.brandColor}
-                    size={focused ? scale(30) : size}
+                    size={focused ? scale(20) : size}
                     style={focused ? styles.iconFocused : styles.iconUnFocused}
                   />
                 </View>
@@ -104,7 +104,7 @@ export default function InsideApp() {
                   <Icons2
                     name="user-alt"
                     color={focused ? colors.white : colors.brandColor}
-                    size={focused ? scale(30) : size}
+                    size={focused ? scale(20) : size}
                     style={[
                       focused ? styles.iconFocused : styles.iconUnFocused,
                       styles.sentToTop,
@@ -120,17 +120,16 @@ export default function InsideApp() {
   );
 }
 
-const HEIGHT = Dimensions.get('window').height * 0.09;
+const HEIGHT = Dimensions.get('window').height * 0.07;
 
 const styles = ScaledSheet.create({
   BottomBarStyles: {
     borderTopWidth: 0,
-    backgroundColor: 'transparent',
+    backgroundColor: colors.white,
     position: 'absolute',
     right: 0,
     left: 0,
-    bottom: '1@s',
-    borderRadius: '15@s',
+    bottom: 0,
     height: HEIGHT,
     justifyContent: 'center',
     alignItems: 'center',
@@ -145,8 +144,8 @@ const styles = ScaledSheet.create({
   iconFocused: {
     backgroundColor: colors.brandColor,
     borderRadius: '150@s',
-    paddingHorizontal: '10@s',
-    paddingVertical: '7@s',
+    paddingHorizontal: '6@s',
+    paddingVertical: '4@s',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -158,7 +157,5 @@ const styles = ScaledSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  // sentToTop:{
-  //   position:'absolute'
-  // }
+
 });

@@ -5,11 +5,11 @@ import { scale,ScaledSheet } from 'react-native-size-matters';
 
 const img = '../ASSETS/blueGirl.jpg';
 
-export default function AppHotImage({ source, keyProp }) {
+export default function AppHotImage({ image, keyProp,onPress }) {
     return (
-        <TouchableHighlight key={keyProp} style={styles.imageWrapper} >
+        <TouchableHighlight key={keyProp} style={styles.imageWrapper} onPress={onPress} >
              <View >
-            <Image style={styles.image} source={source} resizeMode='cover' />
+            <Image style={styles.image} source={image} resizeMode='cover' />
         </View>
         </TouchableHighlight>
        

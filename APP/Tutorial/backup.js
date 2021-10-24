@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -10,7 +10,6 @@ import {
   FlatList,
   ImageEditor,
   Image,
-  Modal,
 } from 'react-native';
 import AppHotImage from '../COMPONENTS/AppHotImage';
 import DateButton from '../COMPONENTS/DateButton';
@@ -19,30 +18,6 @@ import Screen from '../COMPONENTS/Screen';
 import HotDetails from './HotDetails';
 import HotGallery from './HotGallery';
 import {scale, ScaledSheet} from 'react-native-size-matters';
-import ImageLayout from 'react-native-image-layout';
-
-////
-const galleryImages = [
-  {
-    source: require('../ASSETS/black.jpg'),
-  },
-  {
-    source: require('../ASSETS/black.jpg'),
-  },
-  {
-    source: require('../ASSETS/black.jpg'),
-  },
-  {
-    source: require('../ASSETS/black.jpg'),
-  },
-  {
-    source: require('../ASSETS/black.jpg'),
-  },
-  {
-    source: require('../ASSETS/blueGirl.jpg'),
-  },
-];
-
 
 export default function CompleteHotScreen({
   image,
@@ -50,13 +25,29 @@ export default function CompleteHotScreen({
   dept,
   level,
   children,
-  onPressDateButton,
-  useThisGallery=galleryImages,
-  verified
+  onPressDateButton
 }) {
- 
-  const [showModal, setShowModal] = useState(false);
-  const [selectedPic, setSelectedPic] = useState({});
+  const galleryImages = [
+    {
+      source: require('../ASSETS/black.jpg'),
+    },
+    {
+      source: require('../ASSETS/black.jpg'),
+    },
+    {
+      source: require('../ASSETS/black.jpg'),
+    },
+    {
+      source: require('../ASSETS/black.jpg'),
+    },
+    {
+      source: require('../ASSETS/black.jpg'),
+    },
+    {
+      source: require('../ASSETS/blueGirl.jpg'),
+    },
+  ];
+
   const middle = useRef();
 
   return (
@@ -69,28 +60,15 @@ export default function CompleteHotScreen({
         contentOffset={{x: 0, y: CARD_HEIGHT}} //shows the area of the scrollView u wanna see first.
         style={styles.scrollArea}>
         <HotGallery>
-          {useThisGallery.map((image, index) => (
+          {galleryImages.map((imageSrc, index) => (
             <AppHotImage
               key={index * Math.random() * Math.random()}
-              image={image.source}
-              onPress={() => {
-                setSelectedPic(image.source);
-                setShowModal(true);
-                console.log(image.source, 'this is it now');
-              }}
+              source={require('../ASSETS/11.jpg')}
             />
           ))}
-          <Modal visible={showModal} onRequestClose={() => setShowModal(false)}>
-            <View style={styles.modalViewStyle}>
-              <View style={styles.modalImageWrapper}>
-                <Image source={selectedPic} style={styles.modalImage} />
-              </View>
-            </View>
-          </Modal>
         </HotGallery>
         <Screen innerRef={middle} extraStyles={styles.screenStyle}>
           <ProfileDisplay
-          verified={verified}
             extraStyles={styles.ProfileDisplayExtra}
             image={image}
             username={username}
@@ -100,10 +78,7 @@ export default function CompleteHotScreen({
           </ProfileDisplay>
         </Screen>
         <HotDetails>
-          <DateButton
-            extraStyle={styles.dateIcon}
-            onPress={onPressDateButton}
-          />
+          <DateButton extraStyle={styles.dateIcon} onPress={onPressDateButton} />
         </HotDetails>
       </ScrollView>
     </SafeAreaView>
@@ -141,30 +116,12 @@ const styles = ScaledSheet.create({
     display: 'none',
   },
   screenStyle: {
-    paddingTop: scale(5),
-    height: Dimensions.get('window').height - scale(70),
+      paddingTop:scale(5),
+    height: Dimensions.get('window').height-scale(100),
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  ProfileDisplayExtra: {
-    height: '90%',
-  },
-  modalViewStyle: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.8)',
-  },
-  modalImageWrapper: {
-    borderRadius: scale(10),
-    width: Dimensions.get('window').width - scale(30),
-    height: Dimensions.get('window').height - scale(100),
-    justifyContent: 'center',
-    alignItems: 'center',
-    overflow: 'hidden',
-  },
-  modalImage: {
-    height: '100%',
-     width: '100%', 
-  },
+  ProfileDisplayExtra:{
+      height:'90%'
+  }
 });

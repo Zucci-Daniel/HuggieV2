@@ -20,10 +20,7 @@ import ChatScreen from '../SCREENS/ChatScreen';
 import ChatHeader from '../COMPONENTS/ChatHeader';
 import {ScaledSheet, scale} from 'react-native-size-matters';
 import MessageScreen from './MessageScreen';
-import NoWay from '../ASSETS/naa.svg';
-import Pending from '../ASSETS/pending.svg';
-import Congrats from '../ASSETS/congrats.svg';
-
+import Nope from '../ASSETS/nope.png';
 const requestUpdate = [
   {
     id: '1',
@@ -164,14 +161,12 @@ export default function SentRequestScreen({navigation}) {
   const [redLightProfile, setRedLightProfile] = useState({});
   const [pendingLightProfile, setPendingLightProfile] = useState({});
   const [pendingMessage, setPendingMessage] = useState(false);
-  // const [greenLightProfile, setGreenLightProfile] = useState({});
-  const [greenMessage, setGreenMessage] = useState(false);
 
   var arrayOfRedResponses = [
     'Red Light',
-    "It's a no no",
+    'It\'s a no no',
     'She said no',
-    "She didn't agree",
+    'She didn\'t agree',
   ];
   var arrayOfPendingResponses = [
     'Nope!! not yet',
@@ -179,7 +174,8 @@ export default function SentRequestScreen({navigation}) {
     'Wait a bit',
     'It Happens bro',
   ];
-  var randomNumber = Math.ceil(Math.random() * 4);
+
+  var randomNumber = Math.ceil(Math.random() * 3);
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', () => {
@@ -190,6 +186,31 @@ export default function SentRequestScreen({navigation}) {
 
   return (
     <>
+      {redMessage ? (
+        <View style={styles.redMessageScreen}>
+          <MessageScreen
+            title={arrayOfRedResponses[randomNumber]}
+            
+            person={redLightProfile.userImg}>
+            <View style={{height: 200, width: 200, backgroundColor: 'white'}}>
+              {/* <Nope /> */}
+            </View>
+          </MessageScreen>
+        </View>
+      ) : null}
+      {pendingMessage ? (
+        <View style={styles.pendingMessageScreen}>
+          <MessageScreen
+            title={arrayOfPendingResponses[randomNumber]}
+            
+            person={pendingLightProfile.userImg}>
+            <View style={{height: 200, width: 200, backgroundColor: 'white'}}>
+              {/* <Nope /> */}
+            </View>
+          </MessageScreen>
+        </View>
+      ) : null}
+
       <Screen extraStyles={styles.extraStyles}>
         <FlatList
           data={requestUpdate}
@@ -220,11 +241,7 @@ export default function SentRequestScreen({navigation}) {
                 }
                 if (item.light == '#328D07') {
                   setSelectedPerson(item);
-                  setGreenMessage(true);
-
-                  setTimeout(() => {
-                    setShowChatModal(true);
-                  }, 1000);
+                  setShowChatModal(true);
                 }
               }}
             />
@@ -232,54 +249,14 @@ export default function SentRequestScreen({navigation}) {
         />
       </Screen>
       <Modal
-        presentationStyle="fade"
-        visible={greenMessage}
-        onRequestClose={() => setGreenMessage(false)}>
-        <MessageScreen person={selectedPerson.userImg}>
-          <View style={styles.iconWrapper}>
-            <Congrats />
-          </View>
-        </MessageScreen>
-      </Modal>
-      <Modal
-        presentationStyle="fade"
-        visible={redMessage}
-        onRequestClose={() => setRedMessage(false)}>
-        <MessageScreen
-          title={arrayOfRedResponses[randomNumber]}
-          person={redLightProfile.userImg}>
-          <View style={styles.iconWrapper}>
-            <NoWay />
-          </View>
-        </MessageScreen>
-      </Modal>
-      <Modal
-        presentationStyle="fade"
-        visible={pendingMessage}
-        onRequestClose={() => setPendingMessage(false)}>
-        <MessageScreen
-          title={arrayOfPendingResponses[randomNumber]}
-          person={pendingLightProfile.userImg}>
-          <View style={styles.iconWrapper}>
-            <Pending />
-          </View>
-        </MessageScreen>
-      </Modal>
-      <Modal
         presentationStyle="overFullScreen"
         visible={showChatModal}
         animationType="slide"
-        onRequestClose={() => {
-          setGreenMessage(false);
-          setShowChatModal(false);
-        }}>
+        onRequestClose={() => setShowChatModal(false)}>
         <ChatHeader
           screenTitle={selectedPerson.userName}
           screenImage={selectedPerson.userImg}
-          onPress={() => {
-            setGreenMessage(false);
-            setShowChatModal(false);
-          }}
+          onPress={() => setShowChatModal(false)}
         />
         <ChatScreen />
       </Modal>
@@ -291,13 +268,17 @@ const styles = ScaledSheet.create({
   extraStyles: {
     paddingTop: '0%',
     // paddingBottom:scale(200)
-    height: '95%',
+    height: '90%',
   },
-  iconWrapper: {
-    flex: 1,
-    height: 200,
-    width: 200,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+  redMessageScreen: {
+    backgroundColor: 'red',
+    height: Dimensions.get('window').height,
+    width: Dimensions.get('window').width,
+    zIndex: 1000,
+  },
+  pendingMessageScreen: {
+    backgroundColor: 'yellow',
+    height: Dimensions.get('window').height,
+    width: Dimensions.get('window').width,
   },
 });
