@@ -319,12 +319,7 @@ export default function GalleryProfilePictureScreen() {
 const styles = ScaledSheet.create({
     GalleryProfilePicture: {
         width: '100%',
-<<<<<<< HEAD
         height: '100%',
-=======
-        height: 2000,
-        backgroundColor: colors.white,
->>>>>>> 9930650f3917eb5ab975f238f4f1ab4acc1ec401
         alignItems: 'center',
         justifyContent: 'flex-start',
         padding: scale(10)

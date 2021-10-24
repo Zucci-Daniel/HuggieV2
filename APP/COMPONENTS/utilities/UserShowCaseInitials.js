@@ -8,32 +8,19 @@ import VerifiedIcon from './VerifiedIcon'
 import { scale,ScaledSheet } from 'react-native-size-matters';
 
 
-<<<<<<< HEAD
-export default function UserShowCaseInitials({ extraStyles, username, dept, level, children, openModal }) {
-=======
 export default function UserShowCaseInitials({ extraStyles, username, dept, level, children,onPress,verified }) {
->>>>>>> 9930650f3917eb5ab975f238f4f1ab4acc1ec401
     return (
         <TouchableWithoutFeedback onPress={openModal}>
             <View style={[styles.UserShowCaseInitials,extraStyles]}>
             <View style={styles.UserShowCaseDetails}>
                 <View style={styles.initialsPane}>
                 <ProfileName extraStyles={styles.userName} username={username} />
-<<<<<<< HEAD
             {/* <VerifiedIcon /> */}
                 </View>
                 <Details extraStyles={styles.details} department={dept} level={level}/>
                     <View style={styles.selectionPane}>
                         {children}
                     </View>
-=======
-            </TouchableWithoutFeedback>
-          {verified?<VerifiedIcon />:null}
-            </View>
-            <Details extraStyles={styles.details} department={dept} level={level}/>
-                <View style={styles.selectionPane}>
-                    {children}
->>>>>>> 9930650f3917eb5ab975f238f4f1ab4acc1ec401
                 </View>
             </View>
         </TouchableWithoutFeedback>
