@@ -44,9 +44,6 @@ const galleryImages = [
 ];
 
 
-//
-
-
 export default function CompleteHotScreen({
   image,
   username,
@@ -145,7 +142,7 @@ const styles = ScaledSheet.create({
   },
   screenStyle: {
     paddingTop: scale(5),
-    height: Dimensions.get('window').height - scale(100),
+    height: Dimensions.get('window').height - scale(70),
     justifyContent: 'flex-start',
     alignItems: 'center',
   },

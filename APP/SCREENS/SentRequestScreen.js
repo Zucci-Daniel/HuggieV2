@@ -269,13 +269,17 @@ export default function SentRequestScreen({navigation}) {
         presentationStyle="overFullScreen"
         visible={showChatModal}
         animationType="slide"
-        onRequestClose={() =>{
-          setGreenMessage(false)
-          setShowChatModal(false)}}>
+        onRequestClose={() => {
+          setGreenMessage(false);
+          setShowChatModal(false);
+        }}>
         <ChatHeader
           screenTitle={selectedPerson.userName}
           screenImage={selectedPerson.userImg}
-          onPress={() => setShowChatModal(false)}
+          onPress={() => {
+            setGreenMessage(false);
+            setShowChatModal(false);
+          }}
         />
         <ChatScreen />
       </Modal>
@@ -287,7 +291,7 @@ const styles = ScaledSheet.create({
   extraStyles: {
     paddingTop: '0%',
     // paddingBottom:scale(200)
-    height: '90%',
+    height: '95%',
   },
   iconWrapper: {
     flex: 1,
