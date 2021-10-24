@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, View, ScrollView, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { Image, StyleSheet, Text, View, ScrollView, Dimensions, TouchableWithoutFeedback, Alert } from 'react-native';
 import axios from 'axios';
 import colors from '../../config/colors';
 import AppIcon from './AppIcon';
@@ -7,15 +7,19 @@ import PersonalityBoxes from './PersonalityBoxes';
 import UserShowCaseInitials from './UserShowCaseInitials';
 import { scale, ScaledSheet} from 'react-native-size-matters';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {launchImageLibrary} from 'react-native-image-picker';
 import LogoutBtn from './LogoutBtn';
 import SelectBox from './SelectBox';
 import LoadingScreen from '../loadingScreen';
 import EmptyProfilePic from './EmptyProfilePic';
 import DetailsContainer from './DetailsContainer';
+import EditUserDetailsScreen from '../EditUserDetailsScreen';
+
+import IonicIcon from 'react-native-vector-icons/Ionicons';
 
 const width = Dimensions.get('screen').width;
 
-export default function GalleryProfilePictureScreen({ setConfigLoading }) {
+export default function GalleryProfilePictureScreen() {
     const [editable, setEditable] = useState(false);
     const [userData, setUserData] = useState({
         level: '100L',
@@ -28,16 +32,63 @@ export default function GalleryProfilePictureScreen({ setConfigLoading }) {
         attribute_4: '',
         attribute_5: '',
         profile_pic: null,
+        sex: 'male',
         user: {
             username: 'Username'
         }
     });
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [detailsLoading, setDetailsLoading] = useState(false);
+
+    const [modal, setModal] = useState(false)
 
     useEffect(() => {
-        getId()
-    }, [])
+        getId();
+    }, []);
+
+    const openImage = async() => {
+        launchImageLibrary({mediaType: 'photo'}, (response) => {
+            const data =response.assets[0].uri;
+            postImage(data);
+        })
+    }
+
+    const postImage = async(image) => {
+        setLoading(true)
+        const id = await AsyncStorage.getItem('@id');
+        const token = await AsyncStorage.getItem('authToken')
+        const formData = new FormData();
+        formData.append('level', userData.level);
+        formData.append('institution', userData.institution);
+        formData.append('department', userData.department);
+        formData.append('sex', userData.sex);
+
+        
+        formData.append('profile_pic', {uri: image, name: 'image.jpg', type: 'image/jpg'})
+
+        axios.put('https://huggie.herokuapp.com/api/profiles/' + id + '/', formData, {
+            headers: {
+                'Authorization': 'JWT ' + token,
+                redirect: 'follow'
+            }
+        })
+        .then(r => {
+            setLoading(false);
+            setUserData({...userData, profile_pic: image})
+        })
+        .catch(e => {
+            setLoading(false);
+            console.log(e)
+        })
+    }
+
+    const requestPhotoChange = () => {
+        Alert.alert('Change Photo', 'Are you sury you want to change profile photo?', [
+            {text: 'yes', onPress:() => openImage()},
+            {text: 'no'}
+        ])
+    }
 
     const getId = async () => {
         console.log('started')
@@ -45,9 +96,8 @@ export default function GalleryProfilePictureScreen({ setConfigLoading }) {
         axios.get(`https://huggie.herokuapp.com/api/user/${data}/`)
             .then(r => {
                 const data = r.data.bio[0];
-                setUserData(data);
+                setUserData({...data, profile_pic: `https://res.cloudinary.com/dyojwpsfb/${data.profile_pic}`});
                 setLoading(false);
-                console.log(userData)
             })
             .catch(e => {
                 setLoading(false);
@@ -56,24 +106,48 @@ export default function GalleryProfilePictureScreen({ setConfigLoading }) {
     }
 
     const onClick = () => {
+        setItems([]);
         setEditable(prev => !prev);
     }
 
-    const submit = async() => {
-        let formdata = new FormData();
-        formdata.append('level', userData.level);
-        formdata.append("department", userData.department);
-        formdata.append('institution', userData.institution);
-        FormData.append('sex', userData.sex);
-        formdata.append('description', userData.description);
-        // for (let i = 0; i < items.length; i++) {
-        //     // formdata.append('attribute_' + (i+1), items[i])
-        // }
-        console.log(formdata)
-
-        // axios.put('https://huggie.herokuapp.com/api/profiles/' + id + '/', formdata )
-        //     .then(r => console.log(r.data))
-        //     .catch(e => console.log(e))
+    const submit = async () => {
+        setLoading(true)
+        const id = await AsyncStorage.getItem('@id');
+        const token = await AsyncStorage.getItem('authToken')
+        const formData = new FormData();
+        formData.append('description', userData.description);
+        formData.append('level', userData.level);
+        formData.append('institution', userData.institution);
+        formData.append('department', userData.department);
+        formData.append('sex', userData.sex);
+        for (let i = 0; i < items.length; i++) {
+            formData.append('attribute_' + (i+1), items[i])
+        }
+ 
+        axios.put('https://huggie.herokuapp.com/api/profiles/' + id + '/', formData, {
+            headers: {
+                'Authorization': 'JWT ' + token,
+                redirect: 'follow'
+            }
+        })
+        .then(r => {
+            setLoading(false);
+            const newState = {
+                ...userData,
+                attribute_1: items[0],
+                attribute_2: items[1],
+                attribute_3: items[2],
+                attribute_4: items[3],
+                attribute_5: items[4],
+            }
+            setUserData(newState);
+            setEditable(false)
+        })
+        .catch(e => {
+            alert(e)
+            setLoading(false);
+            setEditable(false)
+        })
     }
 
     const itemAdder = (name) => {
@@ -85,6 +159,63 @@ export default function GalleryProfilePictureScreen({ setConfigLoading }) {
         let item = items;
         item.splice(idx, 1);
         setItems(item);
+    }
+
+    const editDetails = async (text) => {
+        setDetailsLoading(true)
+        const id = await AsyncStorage.getItem('@id');
+        const token = await AsyncStorage.getItem('authToken')
+        const formData = new FormData();
+        formData.append('level', userData.level);
+        formData.append('institution', userData.institution);
+        formData.append('department', userData.department);
+        formData.append('sex', userData.sex);
+        formData.append('description', text);
+
+        console.log(formData)
+        axios.put('https://huggie.herokuapp.com/api/profiles/' + id + '/', formData, {
+            headers: {
+                'Authorization': 'JWT ' + token,
+                redirect: 'follow'
+            }
+        })
+        .then(r => {
+            setDetailsLoading(false);
+            const newState = {...userData, description: text};
+            setUserData(newState);
+        })
+        .catch(e => {
+            alert(e);
+            setDetailsLoading(false);
+        })
+    }
+
+    const postUpdatedDetails = async (univ, dept, lev) => {
+        setDetailsLoading(true)
+        const id = await AsyncStorage.getItem('@id');
+        const token = await AsyncStorage.getItem('authToken')
+        const formData = new FormData();
+        formData.append('level', lev);
+        formData.append('institution', univ);
+        formData.append('department', dept);
+        formData.append('sex', userData.sex);
+
+        console.log(formData)
+        axios.put('https://huggie.herokuapp.com/api/profiles/' + id + '/', formData, {
+            headers: {
+                'Authorization': 'JWT ' + token,
+                redirect: 'follow'
+            }
+        })
+        .then(r => {
+            setDetailsLoading(false);
+            const newState = {...userData, description: text};
+            setUserData(newState);
+        })
+        .catch(e => {
+            alert(e);
+            setDetailsLoading(false);
+        })
     }
 
     const div = (
@@ -119,31 +250,60 @@ export default function GalleryProfilePictureScreen({ setConfigLoading }) {
                 <PersonalityBoxes name='Politics' width='40%' itemAdder={itemAdder} itemRemover={itemRemover} fe />
             </View>
         </View>
-    );
+    )
+
+    const button1 = (
+        <TouchableWithoutFeedback onPress={onClick}>
+            <View style={styles.editBtn}>
+                <Text style={styles.text}>Edit</Text>
+            </View>
+        </TouchableWithoutFeedback>
+    )
+
+    const button2 = (
+        <View style={styles.otherBtns}>
+            <TouchableWithoutFeedback onPress={submit}>
+                <View style={styles.editBtn}>
+                    <Text style={styles.text}>Submit</Text>
+                </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={onClick}>
+                <View style={styles.cancleBtn}>
+                    <IonicIcon name='close' color='#fff' size={20} />
+                </View>
+            </TouchableWithoutFeedback>
+        </View>
+    )
+
+    const modalHandler = () => {
+        setModal(prevModal => !prevModal)
+    }
 
     const container = (
         <>
             <View style={styles.picture}>
                 {userData.profile_pic ? 
-                    <Image source={require('../../ASSETS/jackson.jpg')} style={styles.image} resizeMode="cover" />
+                    <TouchableWithoutFeedback onPress={requestPhotoChange}>
+                        <Image source={{ uri: userData.profile_pic}} style={styles.image} resizeMode='cover' />
+                    </TouchableWithoutFeedback>
                     :
-                    <EmptyProfilePic />
-                }
+                    <EmptyProfilePic openImage={openImage} />
+                } 
             </View>
-            <UserShowCaseInitials username={userData.user.username} dept={userData.institution} level={userData.level} />
-            <DetailsContainer description={userData.description} />
+            <UserShowCaseInitials username={userData.user.username} dept={userData.institution} level={userData.level} openModal={modalHandler} />
+            {!detailsLoading ? <DetailsContainer description={userData.description} editDetails={editDetails} /> : <Text style={{paddingTop: 10, paddingBottom: 10}}>Updating...</Text> }
             <View style={styles.likesContainer}>
                 {!editable ? div : newDiv}
-                <TouchableWithoutFeedback onPress={!editable ? onClick : submit}>
-                    <View style={styles.editBtn}>
-                        <Text style={styles.text}>{!editable ? 'Edit' : 'Submit'}</Text>
-                    </View>
-                </TouchableWithoutFeedback>
+                <View style={styles.bottombtnContainer}>
+                    {editable ? button2 : button1}
+                </View>
             </View>
+            <View style={styles.bottomContainer}></View>
         </>
-    )
+    );
     
     return (
+        <>
         <ScrollView >
             <View style={styles.GalleryProfilePicture}>
                 {container}
@@ -151,6 +311,8 @@ export default function GalleryProfilePictureScreen({ setConfigLoading }) {
             </View>
             {loading ? <LoadingScreen /> : null}
         </ScrollView>
+        {modal ? <EditUserDetailsScreen postUpdatedDetails={postUpdatedDetails} closeModal={() => setModal(prevState => !prevState)} /> : null}
+        </>
     )
 };
 
@@ -203,16 +365,37 @@ const styles = ScaledSheet.create({
         borderColor: '#DE5295',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: scale(30)
     },
     text: {
         color: '#DE5295',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        letterSpacing: 1
     },
     rowm: {
         flexDirection: 'row',
         width: '100%',
         flexWrap: 'wrap',
         marginTop: scale(10)
+    },
+    bottombtnContainer: {
+        height: 50,
+        width: '100%',
+        marginTop: scale(20)
+    },
+    otherBtns: {
+        height: '100%',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row'
+    },
+    cancleBtn: {
+        height: scale(40),
+        width: scale(40),
+        borderRadius: 40,
+        backgroundColor: '#E92347',
+        marginLeft: scale(15),
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 });

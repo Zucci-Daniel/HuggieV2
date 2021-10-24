@@ -20,12 +20,11 @@ const store = createStore(
 //////////////    redux settings     /////////////////
 
 const App = () => {
-
-  return (
-    <Provider store={store}>
-      <MainScreen />
-    </Provider>
-  )
+    return (
+      <Provider store={store}>
+        <MainScreen />
+      </Provider>
+    )
 };
 
 const styles=StyleSheet.create({

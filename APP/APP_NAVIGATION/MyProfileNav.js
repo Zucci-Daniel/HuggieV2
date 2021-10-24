@@ -10,14 +10,6 @@ import tabConfig from '../config/tabConfig';
 const Tab = createMaterialTopTabNavigator();
 
 export default function MyProfileNav() {
-
-    const DisplayScreen = () => (
-        <View><Text>Display</Text></View>
-        )
-      const GalleryScreen = () => (
-        <View><Text>Gallery</Text></View>
-      )
-    
     return (
         <Tab.Navigator screenOptions={tabConfig}>    
             <Tab.Screen name="Display" component={ProfileScreen} />   
