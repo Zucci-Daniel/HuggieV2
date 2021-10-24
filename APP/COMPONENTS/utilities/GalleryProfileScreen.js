@@ -40,7 +40,7 @@ const styles = ScaledSheet.create({
     GalleryProfilePicture: {
         width: '100%',
         height: 2000,
-        backgroundColor: 'white',
+        backgroundColor: colors.white,
         alignItems: 'center',
         justifyContent: 'flex-start',
         padding: scale(10)
