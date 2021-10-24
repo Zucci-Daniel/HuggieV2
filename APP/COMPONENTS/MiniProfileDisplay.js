@@ -1,44 +1,50 @@
-import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
-import Details from './utilities/Details'
+import React from 'react';
+import {Image, StyleSheet, Text, View} from 'react-native';
+import Details from './utilities/Details';
 import ProfileName from './utilities/ProfileName';
 import LinearGradient from 'react-native-linear-gradient'; // import LinearGradient
+import colors from '../config/colors';
 
-
-export default function MiniProfileDisplay({ source }) {
-    return (
-        <View style={styles.MiniProfileDisplay}>
-            <Image source={source} style={styles.image} resizeMode={'contain'} />
-            <LinearGradient
-                colors={[' rgba(214, 214, 231, 3)', ' rgba(214, 214, 231, 3)']}
-                style={[styles.linearGradient, styles.initialsWrapper]}
-            >
-                <ProfileName username={"Becky lynch"} />
-                <Details department="Edu English" level={"400"} />
-            </LinearGradient>
-        </View>
-    )
+export default function MiniProfileDisplay({
+  image,
+  username = 'Becky lynch',
+  department = 'Edu English',
+  level = '400',
+  extraStyles,
+}) {
+  return (
+    <View style={styles.MiniProfileDisplay}>
+      <Image source={image} style={styles.image} resizeMode={'cover'} />
+      <LinearGradient
+        colors={['rgba(6,6,6,0.4738095067128414)', 'rgba(2,0,36,1)']}
+        style={[styles.linearGradient, styles.initialsWrapper]}>
+        <ProfileName username={username} extraStyles={{color: colors.white}} />
+        <Details
+          department={department}
+          level={level}
+          extraStyles={{color: colors.white}}
+        />
+      </LinearGradient>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    MiniProfileDisplay: {
-        height: 400, 
-        width: 250,
-        backgroundColor: 'red',
-        flexWrap:'wrap',
-        padding:10
-    },
-    image: {
-        width: '100%',
-        height: '100%',
-    },
-    initialsWrapper: {
-        height: 70,
-        width: '100%',
-        backgroundColor: 'black',
-        position: "absolute",
-        bottom: 0,
-        paddingHorizontal: 15,
-        paddingVertical: 5
-    }
-})
+  MiniProfileDisplay: {
+    height: 400,
+    width: 250,
+    flexWrap: 'wrap',
+    margin: 2,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  initialsWrapper: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    left: 0,
+    padding: 10,
+  },
+});
