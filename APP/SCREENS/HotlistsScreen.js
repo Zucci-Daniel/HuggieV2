@@ -17,6 +17,8 @@ import Icons2 from 'react-native-vector-icons/FontAwesome5';
 import DateButton from '../COMPONENTS/DateButton';
 import LoadingScreen from '../COMPONENTS/loadingScreen';
 import LottieView from 'lottie-react-native';
+import {connect} from 'react-redux';
+import * as actions from '../Redux/Actions/index';
 //gestures
 import {
   TapGestureHandler,
@@ -178,32 +180,11 @@ const cards = [
   },
 ];
 
-export default function HotlistsScreen() {
+function HotlistsScreen(props) {
   const AnimatedView = Animated.createAnimatedComponent(View);
 
   const scale = useSharedValue(0);
   const scale2 = useSharedValue(0);
-
-  const [userData, setUserData] = useState();
-  const [loading, setLoading] = useState();
-  const [reload, setRelaod] = useState(0);
-
-  useEffect(() => {
-    fetchData()
-  },[reload])
-
-  const fetchData = async() => {
-    setLoading(true)
-    axios.get('https://huggie.herokuapp.com/api/profiles/')
-      .then(r => {
-        setLoading(false);
-        console.log(r.data)
-      })
-      .catch(e => {
-        setLoading(false);
-        console.log(e)
-      })
-  }
 
   const rStyle = useAnimatedStyle(() => ({
     transform: [{scale: Math.max(scale.value, 0)}],
@@ -272,27 +253,37 @@ export default function HotlistsScreen() {
     );
   };
   
-  let container = (
-    <View style={styles.errorScreen}>
-      <LottieView source={require('../ASSETS/12701-no-internet-connection.json')} autoPlay loop />
-      <TouchableWithoutFeedback onPress={() => setRelaod(prev => prev + 1)}>
-        <View style={styles.refreshBtn}>
-          <Text style={styles.refreshText}>Reload page</Text>
-        </View>
-      </TouchableWithoutFeedback>
-    </View>
+  // let container = (
+  //   <View style={styles.errorScreen}>
+  //     <LottieView source={require('../ASSETS/12701-no-internet-connection.json')} autoPlay loop />
+  //     <TouchableWithoutFeedback onPress={() => setRelaod(prev => prev + 1)}>
+  //       <View style={styles.refreshBtn}>
+  //         <Text style={styles.refreshText}>Reload page</Text>
+  //       </View>
+  //     </TouchableWithoutFeedback>
+  //   </View>
+  // )
+  
+  const container = (
+    <SafeAreaView style={styles.container}>{returnScrollView()}</SafeAreaView>
   )
-  if(userData){
-    container = (
-      <SafeAreaView style={styles.container}>{returnScrollView()}</SafeAreaView>
-    )
+
+  return container
+};
+
+const mapStateToProps = state => {
+  return{
+    posts: state.posts
   }
-  return (
-    <>
-      {!loading ? container : <LoadingScreen />}
-    </>
-  );
 }
+
+const mapDispatchToProps = dispatch => {
+  return{
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HotlistsScreen)
 
 const CARD_WIDTH = Dimensions.get('window').width * 1;
 const CARD_HEIGHT = Dimensions.get('window').height * 1;

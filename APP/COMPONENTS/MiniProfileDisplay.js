@@ -4,6 +4,7 @@ import Details from './utilities/Details';
 import ProfileName from './utilities/ProfileName';
 import LinearGradient from 'react-native-linear-gradient'; // import LinearGradient
 import colors from '../config/colors';
+import emtpy from '../ASSETS/empty.png';
 
 export default function MiniProfileDisplay({
   image,
@@ -11,10 +12,17 @@ export default function MiniProfileDisplay({
   department = 'Edu English',
   level = '400',
   extraStyles,
-}) {
+}){
+  const emptyImage = (
+    <View style={styles.emptyImage}>
+      <Image source={emtpy} style={{height: 70, width: 70}} />
+    </View>
+  )
   return (
     <View style={styles.MiniProfileDisplay}>
-      <Image source={image} style={styles.image} resizeMode={'cover'} />
+      {image ? 
+        <Image source={{uri: `https://res.cloudinary.com/dyojwpsfb/${image}`}} style={styles.image} resizeMode={'cover'} />
+        : emptyImage }
       <LinearGradient
         colors={['rgba(6,6,6,0.4738095067128414)', 'rgba(2,0,36,1)']}
         style={[styles.linearGradient, styles.initialsWrapper]}>
@@ -47,4 +55,11 @@ const styles = StyleSheet.create({
     left: 0,
     padding: 10,
   },
+  emptyImage: {
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'cyan',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 });

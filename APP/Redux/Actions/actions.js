@@ -89,51 +89,6 @@ const screen2 = () => {
     }
 };
 
-export const postData1 = (data) => {
-    return dispatch => {
-        // var formdata = new FormData();
-        // formdata.append('institution', data.institution);
-        // formdata.append('department', data.department);
-        // formdata.append('description', data.description);
-        // formdata.append('sex', data.sex);
-        // formdata.append('level', data.level);
-
-        // var myHeaders = new Headers();
-        // myHeaders.append('Authorization', 'JWT ' + data.token);
-        // myHeaders.append('Content-Type', 'application/json');
-        // myHeaders.append('Accept', 'application/json')
-
-        // var requestOptions = {
-        //     method: 'GET',
-        //     mode: 'no-cors',
-        //     credentials: 'same-origin',
-        //     headers: myHeaders,
-        //     body: formdata,
-        //     redirect: 'follow'
-        //   };
-
-        // axios.put('https://huggie.herokuapp.com/api/profiles/43/', requestOptions)
-        //     .then(response => console.log(response.data))
-        //     .catch(error => console.log('error', error.response.data))
-
-        // // var request = new XMLHttpRequest();
-        // // request.onreadystatechange = (e) => {
-        // //     if(request.readyState !== 4){
-        // //         return;
-        // //     }
-
-        // //     if (request.status === 200) {
-        // //         console.log('success', request.responseText);
-        // //     } else {
-        // //         console.warn(error);
-        // //     }
-        // // };
-
-        // // request.open('PUT', 'https://huggie.herokuapp.com/api/profiles/41/', formdata );
-        // // request.send();
-    }
-}
-
 export const login = (data) => {
     return dispatch => {
         const formdata = new FormData();
@@ -156,5 +111,26 @@ export const login = (data) => {
                 console.log(e)
                 dispatch(setLoading(false));
             })
+    }
+}
+
+export const posts = () => {
+    return dispatch => {
+        axios.get('https://huggie.herokuapp.com/api/profiles/')
+        .then(r => {
+            console.log(r.data);
+            dispatch(setPosts(r.data))
+        })
+        .catch(e => {
+            console.log(e);
+            dispatch(setPosts(e.data))
+        })
+    }
+}
+
+const setPosts = (val) => {
+    return{
+        type: actionTypes.POSTS,
+        value: val
     }
 }
