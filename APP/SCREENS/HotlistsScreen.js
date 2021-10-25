@@ -1,4 +1,4 @@
-import React, {useCallback,useEffect} from 'react';
+import React, {useCallback,useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -8,12 +8,17 @@ import {
   Dimensions,
   Platform,
   Button,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import SelectBox from '../COMPONENTS/utilities/SelectBox';
 import CompleteHotScreen from './CompleteHotScreen';
 import {scale, ScaledSheet} from 'react-native-size-matters';
 import Icons2 from 'react-native-vector-icons/FontAwesome5';
 import DateButton from '../COMPONENTS/DateButton';
+import LoadingScreen from '../COMPONENTS/loadingScreen';
+import LottieView from 'lottie-react-native';
+import {connect} from 'react-redux';
+import * as actions from '../Redux/Actions/index';
 //gestures
 import {
   TapGestureHandler,
@@ -24,6 +29,7 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
+import axios from 'axios';
 
 const cards = [
   {
@@ -174,7 +180,7 @@ const cards = [
   },
 ];
 
-export default function HotlistsScreen() {
+function HotlistsScreen(props) {
   const AnimatedView = Animated.createAnimatedComponent(View);
 
   const scale = useSharedValue(0);
@@ -246,10 +252,38 @@ export default function HotlistsScreen() {
       </TapGestureHandler>
     );
   };
-  return (
+  
+  // let container = (
+  //   <View style={styles.errorScreen}>
+  //     <LottieView source={require('../ASSETS/12701-no-internet-connection.json')} autoPlay loop />
+  //     <TouchableWithoutFeedback onPress={() => setRelaod(prev => prev + 1)}>
+  //       <View style={styles.refreshBtn}>
+  //         <Text style={styles.refreshText}>Reload page</Text>
+  //       </View>
+  //     </TouchableWithoutFeedback>
+  //   </View>
+  // )
+  
+  const container = (
     <SafeAreaView style={styles.container}>{returnScrollView()}</SafeAreaView>
-  );
+  )
+
+  return container
+};
+
+const mapStateToProps = state => {
+  return{
+    posts: state.posts
+  }
 }
+
+const mapDispatchToProps = dispatch => {
+  return{
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HotlistsScreen)
 
 const CARD_WIDTH = Dimensions.get('window').width * 1;
 const CARD_HEIGHT = Dimensions.get('window').height * 1;
@@ -296,4 +330,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     opacity:0
   },
+  errorScreen: {
+    height: '100%',
+    width: '100%',
+    backgroundColor: '#fff'
+  },
+  refreshBtn:{
+    height: scale(40),
+    width: scale(150),
+    borderWidth: 1,
+    borderColor: '#DE5295',
+    borderRadius: scale(20),
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: scale(100),
+    alignSelf: 'center'
+  },
+  refreshText: {
+    fontWeight: 'bold',
+    fontSize: scale(16),
+    color: '#DE5295',
+    letterSpacing: 1
+  }
 });

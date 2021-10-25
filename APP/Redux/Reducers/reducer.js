@@ -6,7 +6,9 @@ const initialSatate = {
     loading: false,
     loading2: false,
     
-    is_signup: null
+    is_signup: null,
+
+    posts: null
 }
 
 const reducer = (state = initialSatate, actions) => {
@@ -18,7 +20,9 @@ const reducer = (state = initialSatate, actions) => {
         case actionTypes.CLEARAUTHSTATE: 
             return{is_signup: null};
         case actionTypes.LOADING2: 
-            return{loading2: actions.value}
+            return{loading2: actions.value};
+        case actionTypes.POSTS:
+            return{posts: actions.value}
     }
     return state;
 }

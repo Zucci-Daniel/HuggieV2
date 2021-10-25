@@ -4,5 +4,6 @@ export {
     logout,
     continueSignup,
     setLoading2,
-    login
+    login,
+    posts
 } from './actions';

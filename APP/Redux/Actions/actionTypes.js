@@ -8,3 +8,4 @@ export const IS_SIGNUP = 'IS_SIGNUP';
 export const SCREEN2 = 'SCREEN2';
 export const SCREEN3 = 'SCREEN3';
 
+export const POSTS = 'POSTS';
