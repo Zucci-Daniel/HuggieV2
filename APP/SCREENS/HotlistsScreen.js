@@ -1,4 +1,4 @@
-import React, {useCallback,useEffect} from 'react';
+import React, {useCallback,useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -8,12 +8,15 @@ import {
   Dimensions,
   Platform,
   Button,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import SelectBox from '../COMPONENTS/utilities/SelectBox';
 import CompleteHotScreen from './CompleteHotScreen';
 import {scale, ScaledSheet} from 'react-native-size-matters';
 import Icons2 from 'react-native-vector-icons/FontAwesome5';
 import DateButton from '../COMPONENTS/DateButton';
+import LoadingScreen from '../COMPONENTS/loadingScreen';
+import LottieView from 'lottie-react-native';
 //gestures
 import {
   TapGestureHandler,
@@ -24,6 +27,7 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
+import axios from 'axios';
 
 const cards = [
   {
@@ -180,6 +184,27 @@ export default function HotlistsScreen() {
   const scale = useSharedValue(0);
   const scale2 = useSharedValue(0);
 
+  const [userData, setUserData] = useState();
+  const [loading, setLoading] = useState();
+  const [reload, setRelaod] = useState(0);
+
+  useEffect(() => {
+    fetchData()
+  },[reload])
+
+  const fetchData = async() => {
+    setLoading(true)
+    axios.get('https://huggie.herokuapp.com/api/profiles/')
+      .then(r => {
+        setLoading(false);
+        console.log(r.data)
+      })
+      .catch(e => {
+        setLoading(false);
+        console.log(e)
+      })
+  }
+
   const rStyle = useAnimatedStyle(() => ({
     transform: [{scale: Math.max(scale.value, 0)}],
     display: 'flex',
@@ -246,8 +271,26 @@ export default function HotlistsScreen() {
       </TapGestureHandler>
     );
   };
+  
+  let container = (
+    <View style={styles.errorScreen}>
+      <LottieView source={require('../ASSETS/12701-no-internet-connection.json')} autoPlay loop />
+      <TouchableWithoutFeedback onPress={() => setRelaod(prev => prev + 1)}>
+        <View style={styles.refreshBtn}>
+          <Text style={styles.refreshText}>Reload page</Text>
+        </View>
+      </TouchableWithoutFeedback>
+    </View>
+  )
+  if(userData){
+    container = (
+      <SafeAreaView style={styles.container}>{returnScrollView()}</SafeAreaView>
+    )
+  }
   return (
-    <SafeAreaView style={styles.container}>{returnScrollView()}</SafeAreaView>
+    <>
+      {!loading ? container : <LoadingScreen />}
+    </>
   );
 }
 
@@ -296,4 +339,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     opacity:0
   },
+  errorScreen: {
+    height: '100%',
+    width: '100%',
+    backgroundColor: '#fff'
+  },
+  refreshBtn:{
+    height: scale(40),
+    width: scale(150),
+    borderWidth: 1,
+    borderColor: '#DE5295',
+    borderRadius: scale(20),
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: scale(100),
+    alignSelf: 'center'
+  },
+  refreshText: {
+    fontWeight: 'bold',
+    fontSize: scale(16),
+    color: '#DE5295',
+    letterSpacing: 1
+  }
 });

@@ -8,7 +8,7 @@ import VerifiedIcon from './VerifiedIcon'
 import { scale,ScaledSheet } from 'react-native-size-matters';
 
 
-export default function UserShowCaseInitials({ extraStyles, username, dept, level, children,onPress,verified }) {
+export default function UserShowCaseInitials({ extraStyles, username, dept, level, children, openModal }) {
     return (
         <TouchableWithoutFeedback onPress={openModal}>
             <View style={[styles.UserShowCaseInitials,extraStyles]}>

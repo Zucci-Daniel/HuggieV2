@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     flexWapper: {
         width: '100%',
         flexDirection: 'row',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        marginBottom: 100
     }
 })

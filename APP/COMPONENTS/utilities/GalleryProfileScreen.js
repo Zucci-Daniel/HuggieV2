@@ -41,11 +41,12 @@ export default function GalleryProfilePictureScreen() {
     const [loading, setLoading] = useState(true);
     const [detailsLoading, setDetailsLoading] = useState(false);
 
-    const [modal, setModal] = useState(false)
+    const [modal, setModal] = useState(false);
+    const [refresh, setRefesh] = useState(0)
 
     useEffect(() => {
         getId();
-    }, []);
+    }, [refresh]);
 
     const openImage = async() => {
         launchImageLibrary({mediaType: 'photo'}, (response) => {
@@ -75,7 +76,8 @@ export default function GalleryProfilePictureScreen() {
         })
         .then(r => {
             setLoading(false);
-            setUserData({...userData, profile_pic: image})
+            setUserData({...userData, profile_pic: image});
+            setRefesh(prev => prev + 1)
         })
         .catch(e => {
             setLoading(false);
@@ -91,13 +93,13 @@ export default function GalleryProfilePictureScreen() {
     }
 
     const getId = async () => {
-        console.log('started')
         const data = await AsyncStorage.getItem('@id');
         axios.get(`https://huggie.herokuapp.com/api/user/${data}/`)
             .then(r => {
                 const data = r.data.bio[0];
-                setUserData({...data, profile_pic: `https://res.cloudinary.com/dyojwpsfb/${data.profile_pic}`});
+                setUserData({...data, profile_pic: data.profile_pic});
                 setLoading(false);
+                console.log(data.profile_pic)
             })
             .catch(e => {
                 setLoading(false);
@@ -284,7 +286,7 @@ export default function GalleryProfilePictureScreen() {
             <View style={styles.picture}>
                 {userData.profile_pic ? 
                     <TouchableWithoutFeedback onPress={requestPhotoChange}>
-                        <Image source={{ uri: userData.profile_pic}} style={styles.image} resizeMode='cover' />
+                        <Image source={{ uri: `https://res.cloudinary.com/dyojwpsfb/${userData.profile_pic}`}} style={styles.image} resizeMode='cover' />
                     </TouchableWithoutFeedback>
                     :
                     <EmptyProfilePic openImage={openImage} />
