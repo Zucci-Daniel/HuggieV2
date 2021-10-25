@@ -1,6 +1,8 @@
 package com.newhuggieapp;
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;
+// react-native-splash-screen >= 0.3.1
+import org.devio.rn.splashscreen.SplashScreen; // here
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
@@ -25,7 +27,9 @@ protected ReactActivityDelegate createReactActivityDelegate() {
 }
 @Override
 protected void onCreate(Bundle savedInstanceState) {
-  super.onCreate(null);
+  // super.onCreate(null);
+   SplashScreen.show(this, R.style.SplashScreenTheme);
+        super.onCreate(savedInstanceState);
 }
 
 }

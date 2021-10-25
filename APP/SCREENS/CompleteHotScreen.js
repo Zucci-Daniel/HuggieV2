@@ -157,7 +157,7 @@ const styles = ScaledSheet.create({
   },
   modalImageWrapper: {
     borderRadius: scale(10),
-    width: Dimensions.get('window').width - scale(30),
+    width: Dimensions.get('window').width - scale(30), 
     height: Dimensions.get('window').height - scale(100),
     justifyContent: 'center',
     alignItems: 'center',
