@@ -16,6 +16,7 @@ import DetailsContainer from './DetailsContainer';
 import EditUserDetailsScreen from '../EditUserDetailsScreen';
 
 import IonicIcon from 'react-native-vector-icons/Ionicons';
+import EditSearch from '../EditSearch';
 
 const width = Dimensions.get('screen').width;
 
@@ -309,6 +310,7 @@ export default function GalleryProfilePictureScreen() {
         <ScrollView >
             <View style={styles.GalleryProfilePicture}>
                 {container}
+                <EditSearch />
                 <LogoutBtn />
             </View>
             {loading ? <LoadingScreen /> : null}

@@ -7,18 +7,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icons from 'react-native-vector-icons/Ionicons'
 import PersonalityBoxes from '../COMPONENTS/utilities/PersonalityBoxes';
 import LoadingScreen from '../COMPONENTS/loadingScreen';
+import { connect } from 'react-redux';
 
 const width = Dimensions.get('screen').width;
 const statusbarHeight = StatusBar.currentHeight;
 
-function SignupScreen3({data, clearScreen}) {
+function SignupScreen3(props) {
     const [loading, setLoading] = useState(false);
 
     const [items, setItems] = useState([]);
     const [search, setSearch] = useState([]);
     
     useEffect(() => {
-        fetchData()
+        fetchData
     },[]);
 
     const fetchData = () => {
@@ -61,19 +62,19 @@ function SignupScreen3({data, clearScreen}) {
 
     const submit2 = async () => {
         setLoading(true)
-        const id = await AsyncStorage.getItem('@id');
-        const token = await AsyncStorage.getItem('authToken')
-        const sex = await data.sex;
+        const id = props.data.id
+        const token = props.data.token
+        const sex = await props.data.sex;
         const NewSex = sex.toLowerCase();
         const formdata = new FormData();
         for (let i = 0; i < items.length; i++) {
             formdata.append('attribute_' + (i+1), items[i])
         }
-        formdata.append('level', data.level+'L');
+        formdata.append('level', props.data.level+'L');
         formdata.append('sex', NewSex );
-        formdata.append('description', data.description);
-        formdata.append('department', data.department);
-        formdata.append('institution', data.institution);
+        formdata.append('description', props.data.description);
+        formdata.append('department', props.data.department);
+        formdata.append('institution', props.data.institution);
         console.log(formdata);
 
         axios.put('https://huggie.herokuapp.com/api/profiles/' + id + '/', formdata, {
@@ -86,13 +87,23 @@ function SignupScreen3({data, clearScreen}) {
             setLoading(false);
             console.log(r.data);
             AsyncStorage.setItem('loginId', 'token');
-            console.lof('successful')
-            clearScreen()
+            exitPage()
+            
         })
         .catch(e => {
             setLoading(false);
             console.log(e.response.data);
         });
+    }
+
+    const exitPage = () => {
+        try {
+            props.clearScreen(null);
+            console.log('Hello')
+        } catch (error) {
+            console.log(error, 'error')
+        }
+        
     }
 
     return (
@@ -151,6 +162,12 @@ function SignupScreen3({data, clearScreen}) {
         {loading ? <LoadingScreen /> : null}
         </>
     );
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return{
+        clearScreene: (value) => dispatch({type: 'SCREEN', value: value})
+    }
 }
 
 const styles = StyleSheet.create({
@@ -251,4 +268,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default SignupScreen3;
+export default connect(null, mapDispatchToProps)(SignupScreen3);

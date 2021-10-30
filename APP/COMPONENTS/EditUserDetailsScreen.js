@@ -143,9 +143,8 @@ const styles = StyleSheet.create({
     },
     headerText: {
         color: '#000',
-        fontWeight: 'bold',
         letterSpacing: 1,
-        fontSize: scale(18),
+        fontSize: 17,
         opacity: 0.8
     },
     headerLine: {
@@ -162,10 +161,9 @@ const styles = StyleSheet.create({
         marginLeft: '7%',
         borderRadius: 7,
         paddingLeft: 15,
-        fontSize: scale(17),
+        fontSize: 17,
         marginBottom: 15,
-        letterSpacing: 1.5,
-        fontWeight: '600',
+        letterSpacing: 1.5
     },
     submitButtons: {
         height: scale(50),

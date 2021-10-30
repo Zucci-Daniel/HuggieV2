@@ -46,7 +46,7 @@ export const Auth = (data, type) => {
                 AsyncStorage.setItem('@id', id.toString());
                 AsyncStorage.setItem('sex', data.sex);
 
-                dispatch(setScreen(true));
+                dispatch(setScreen(1));
                 dispatch(setLoading(false));
                 dispatch(signup(response.data.token));
             })
@@ -57,9 +57,10 @@ export const Auth = (data, type) => {
     }
 };
 
-export const setScreen = (value) => {
-    return dispatch => {
-        AsyncStorage.setItem('newScreen', 'something')
+export const setScreen = () => {
+    return{
+        type: actionTypes.SCREEN,
+        value: 1
     }
 }
 

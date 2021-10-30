@@ -72,7 +72,8 @@ function HotlistsScreen(props) {
   }, [props.posts]);
 
   const reload = () => {
-    props.setReload();
+    const number = Math.random();
+    props.setReload(number);
   }
 
   const returnScrollView = () => {
@@ -146,7 +147,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return{
-    setReload: () => dispatch({type: 'RELOAD'})
+    setReload: (val) => dispatch({type: 'RELOAD', value: val})
   }
 }
 

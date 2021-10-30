@@ -19,7 +19,8 @@ function EveryOneScreen(props) {
   const [posts, setPosts] = useState();
 
   useEffect(() => {
-    fetchPosts()
+    fetchPosts();
+    console.log(props.reload)
   }, [props.reload])
 
   const fetchPosts = async() => {
@@ -57,7 +58,8 @@ function EveryOneScreen(props) {
   }
 
   const reload = () => {
-    props.setReload();
+    const number = Math.random();
+    props.setReload(number);
   }
 
   let container  = (
@@ -109,7 +111,7 @@ const mapDispatchToProps = dispatch => {
   return{
     setPost: (val) => dispatch({type: 'POSTS', value: val}),
     setLoading: (val) => dispatch({type: 'LOADING2', value: val}),
-    setReload: () => dispatch({type: 'RELOAD'})
+    setReload: (val) => dispatch({type: 'RELOAD', value: val})
   }
 }
 
