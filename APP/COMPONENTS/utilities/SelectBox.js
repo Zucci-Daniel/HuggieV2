@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import colors from '../../config/colors'
 
 export default function SelectBox({ likes }) {
-    return (
+    let container = (
         <View style={styles.SelectBox}>
             <View style={{ alignSelf: 'center', padding: '5%' }} >
                 <Text style={styles.text}>{likes}</Text>
             </View>
         </View>
+    )
+    return (
+        <>
+            {likes ? container : null}
+        </>
     )
 }
 

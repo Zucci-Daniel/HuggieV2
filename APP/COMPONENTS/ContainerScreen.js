@@ -2,8 +2,7 @@ import React, {useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import SignupScreen2 from '../SCREENS/SignupScreen2';
-import SignupScreen3 from '../SCREENS/SignupScreen3'
-import LogoutBtn from './utilities/LogoutBtn';
+import SignupScreen3 from '../SCREENS/SignupScreen3';
 import InsideApp from '../APP_NAVIGATION/InsideApp';
 
 function ContainerScreen() {
@@ -41,7 +40,7 @@ function ContainerScreen() {
 
     return (
         <>
-            {screen ? div: <InsideApp/>}
+            {!screen ? <InsideApp/> : div }
         </>
     );
 }

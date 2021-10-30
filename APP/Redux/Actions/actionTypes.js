@@ -9,3 +9,4 @@ export const SCREEN2 = 'SCREEN2';
 export const SCREEN3 = 'SCREEN3';
 
 export const POSTS = 'POSTS';
+export const RELOAD = 'RELOAD';

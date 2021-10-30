@@ -3,14 +3,16 @@ import MasonryList from 'react-native-masonry-list';
 import ImageLayout from 'react-native-image-layout';
 //...
 import MiniProfileDisplay from '../COMPONENTS/MiniProfileDisplay';
-import {FlatList, Image,StyleSheet, Text, View} from 'react-native';
+import {FlatList, Image,StyleSheet, Text, View ,TouchableWithoutFeedback} from 'react-native';
 import Screen from '../COMPONENTS/Screen';
 import { scale } from 'react-native-size-matters';
 import {connect} from 'react-redux';
 import * as actions from '../Redux/Actions/index';
+import axios from 'axios';
 
 import LoadingScreen from '../COMPONENTS/loadingScreen';
-import axios from 'axios';
+import LottieView from 'lottie-react-native';
+// import { template } from '@babel/core';
 
 function EveryOneScreen(props) {
   const [loading, setLoading] = useState(true);
@@ -18,40 +20,55 @@ function EveryOneScreen(props) {
 
   useEffect(() => {
     fetchPosts()
-  }, [])
+  }, [props.reload])
 
   const fetchPosts = async() => {
+    props.setLoading(true)
     axios.get('https://huggie.herokuapp.com/api/profiles/')
       .then(r => {
-          console.log(r.data.results);
-          setPosts(r.data.results)
+          console.log('fetched')
+          setPosts(r.data.results);
+          props.setPost(r.data.results);
           setLoading(false);
+          props.setLoading(false)
       })
       .catch(e => {
           console.log(e);
-          setLoading(false)
+          setLoading(false);
+          props.setLoading(false)
       })
+    console.log('Hello world')
+  };
+
+  const updateArray = (id) => {
+    const arr = [...posts];
+    const newArr = arr.splice(id);
+    // console.log('arr', item.id)
+    // const newArr = arr.filter(i => item.id >= i.id)
+    props.setPost(null);
+    props.navigation.navigate({ name: 'hotlistScreen', merge: true });
+    setArr(newArr)
+    console.log('finished')
   }
-  
-  // const container = (
-  //   <Screen extraStyles={styles.ScreenExtraStyles}>
-  //   <FlatList
-  //    data={cards}
-  //    keyExtractor={(item)=>item.id}
-  //    numColumns={2}
-  //    renderItem={({item,index})=><MiniProfileDisplay 
-  //        username={item.username}
-  //        department={item.department}
-  //        level={item.level}
-  //        image={item.source}
-  //      />
-  //    }
-  //   />
-  //  </Screen>
-  // )
+
+  const setArr = (newArr) => {
+    props.setPost(newArr);
+    console.log('done')
+  }
+
+  const reload = () => {
+    props.setReload();
+  }
 
   let container  = (
-    <View style={{backgroundColor: 'red', height: '100%', width: '100%', position: 'absolute', top: 0}}></View>
+    <View style={styles.errorScreen}>
+      <LottieView source={require('../ASSETS/12701-no-internet-connection.json')} autoPlay loop />
+      <TouchableWithoutFeedback onPress={reload}>
+        <View style={styles.refreshBtn}>
+          <Text style={styles.refreshText}>Reload page</Text>
+        </View>
+      </TouchableWithoutFeedback>
+    </View>
   )
 
   if(posts){
@@ -62,10 +79,12 @@ function EveryOneScreen(props) {
         keyExtractor={(item)=>item.id}
         numColumns={2}
         renderItem={({item,index})=><MiniProfileDisplay 
+            value={index}
             username={item.user.username}
             department={item.department}
             level={item.level}
             image={item.profile_pic}
+            updateArray={updateArray}
           />
         }
         />
@@ -80,18 +99,49 @@ function EveryOneScreen(props) {
   );
 }
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps  = state => {
   return{
-    setPost: () => dispatch({type: 'POSTS', value: 'Hello world'})
+    reload: state.reload
   }
 }
 
-export default connect(null, mapDispatchToProps)(EveryOneScreen)
+const mapDispatchToProps = dispatch => {
+  return{
+    setPost: (val) => dispatch({type: 'POSTS', value: val}),
+    setLoading: (val) => dispatch({type: 'LOADING2', value: val}),
+    setReload: () => dispatch({type: 'RELOAD'})
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EveryOneScreen)
 
 const styles=StyleSheet.create({
-ScreenExtraStyles:{
+  ScreenExtraStyles:{
     paddingBottom:'40%',
     justifyContent:'center',
-    alignItems:'center'
+    alignItems:'center',
+  },
+  errorScreen: {
+    height: '100%',
+    width: '100%',
+    backgroundColor: '#fff'
+  },
+  refreshBtn:{
+    height: scale(40),
+    width: scale(150),
+    borderWidth: 1,
+    borderColor: '#DE5295',
+    borderRadius: scale(20),
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: scale(100),
+    alignSelf: 'center'
+  },
+  refreshText: {
+    fontWeight: 'bold',
+    fontSize: scale(16),
+    color: '#DE5295',
+    letterSpacing: 1
   }
 })
