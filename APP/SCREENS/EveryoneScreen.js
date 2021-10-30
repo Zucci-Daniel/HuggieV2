@@ -43,12 +43,12 @@ function EveryOneScreen(props) {
   const updateArray = (id) => {
     const arr = [...posts];
     const newArr = arr.splice(id);
-    // console.log('arr', item.id)
-    // const newArr = arr.filter(i => item.id >= i.id)
+    
     props.setPost(null);
     props.navigation.navigate({ name: 'hotlistScreen', merge: true });
     setArr(newArr)
-    console.log('finished')
+    console.log('finished');
+
   }
 
   const setArr = (newArr) => {
