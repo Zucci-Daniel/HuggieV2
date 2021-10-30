@@ -31,154 +31,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import axios from 'axios';
 
-const cards = [
-  {
-    username: 'Rose Naka',
-    level: 400,
-    department: 'Finance',
-    source: require('../ASSETS/bw.jpg'),
-    likes: ['eating', 'smoking', 'riding', 'laughing'],
-    gallery: [
-      {
-        source: require('../ASSETS/bw.jpg'),
-      },
-      {
-        source: require('../ASSETS/bw.jpg'),
-      },
-      {
-        source: require('../ASSETS/bw.jpg'),
-      },
-      {
-        source: require('../ASSETS/bw.jpg'),
-      },
-      {
-        source: require('../ASSETS/bw.jpg'),
-      },
-      {
-        source: require('../ASSETS/bw.jpg'),
-      },
-    ],
-    verified: true,
-  },
-  {
-    username: 'Princess Ebere',
-    level: 500,
-    department: 'Computer Science',
-    source: require('../ASSETS/9.jpg'),
-    likes: ['making friends', 'singing', 'act', 'shouting'],
-    gallery: [
-      {
-        source: require('../ASSETS/9.jpg'),
-      },
-      {
-        source: require('../ASSETS/9.jpg'),
-      },
-      {
-        source: require('../ASSETS/9.jpg'),
-      },
-      {
-        source: require('../ASSETS/9.jpg'),
-      },
-      {
-        source: require('../ASSETS/9.jpg'),
-      },
-      {
-        source: require('../ASSETS/9.jpg'),
-      },
-    ],
-    verified: false,
-  },
-
-  {
-    username: 'Angel Jopet',
-    level: 200,
-    department: 'Industrial Chem',
-    source: require('../ASSETS/8.jpg'),
-
-    likes: ['fighting', 'talking', 'yoga'],
-    gallery: [
-      {
-        source: require('../ASSETS/8.jpg'),
-      },
-      {
-        source: require('../ASSETS/8.jpg'),
-      },
-      {
-        source: require('../ASSETS/8.jpg'),
-      },
-      {
-        source: require('../ASSETS/8.jpg'),
-      },
-      {
-        source: require('../ASSETS/8.jpg'),
-      },
-      {
-        source: require('../ASSETS/8.jpg'),
-      },
-    ],
-    verified: true,
-  },
-
-  {
-    username: 'Sasha Huncho',
-    level: 300,
-    department: 'Computer Sci',
-    source: require('../ASSETS/14.jpg'),
-
-    likes: ['foodie', 'migos', 'attitude', 'laughing'],
-    gallery: [
-      {
-        source: require('../ASSETS/14.jpg'),
-      },
-      {
-        source: require('../ASSETS/14.jpg'),
-      },
-      {
-        source: require('../ASSETS/14.jpg'),
-      },
-      {
-        source: require('../ASSETS/14.jpg'),
-      },
-      {
-        source: require('../ASSETS/14.jpg'),
-      },
-      {
-        source: require('../ASSETS/14.jpg'),
-      },
-    ],
-    verified: true,
-  },
-
-  {
-    username: 'Pretty Nnaji',
-    level: 300,
-    department: 'Computer Sci',
-    source: require('../ASSETS/15.jpg'),
-
-    likes: ['foodie', 'korean'],
-    gallery: [
-      {
-        source: require('../ASSETS/15.jpg'),
-      },
-      {
-        source: require('../ASSETS/15.jpg'),
-      },
-      {
-        source: require('../ASSETS/15.jpg'),
-      },
-      {
-        source: require('../ASSETS/15.jpg'),
-      },
-      {
-        source: require('../ASSETS/15.jpg'),
-      },
-      {
-        source: require('../ASSETS/15.jpg'),
-      },
-    ],
-    verified: false,
-  },
-];
 
 function HotlistsScreen(props) {
   const AnimatedView = Animated.createAnimatedComponent(View);
@@ -209,9 +61,19 @@ function HotlistsScreen(props) {
     })})
 
 
-    useEffect(() => {
-    showTipAnimation()
-    }, [])
+  useEffect(() => {
+  showTipAnimation()
+  }, []);
+
+  useEffect(() => {
+    if(props.posts){
+      console.log(props.posts.length)
+    }
+  }, [props.posts]);
+
+  const reload = () => {
+    props.setReload();
+  }
 
   const returnScrollView = () => {
     return (
@@ -231,18 +93,18 @@ function HotlistsScreen(props) {
             snapToInterval={CARD_WIDTH + 0}
             snapToAlignment="center"
             disableIntervalMomentum={true}>
-            {cards.map((users, index) => (
+            {props.posts.map((users, index) => (
               <View key={index} style={styles.wrapper}>
                 <CompleteHotScreen
                   verified={users.verified}
-                  useThisGallery={users.gallery}
-                  username={users.username}
-                  image={users.source}
+                  useThisGallery={[users.picture_1, users.picture_2, users.picture_3, users.picture_4, users.picture_5, users.picture_6]}
+                  username={users.user.username}
+                  image={users.profile_pic}
                   level={users.level}
                   dept={users.department}
                   onPressDateButton={showSentAnimation}>
-                  {users.likes.map((like, index) => (
-                    <SelectBox key={like + index * Math.random} likes={like} />
+                  {[users.attribute_1, users.attribute_2, users.attribute_3, users.attribute_4, users.attribute_5].map((like, index) => (
+                    <SelectBox key={index} likes={like} />
                   ))}
                 </CompleteHotScreen>
               </View>
@@ -253,33 +115,38 @@ function HotlistsScreen(props) {
     );
   };
   
-  // let container = (
-  //   <View style={styles.errorScreen}>
-  //     <LottieView source={require('../ASSETS/12701-no-internet-connection.json')} autoPlay loop />
-  //     <TouchableWithoutFeedback onPress={() => setRelaod(prev => prev + 1)}>
-  //       <View style={styles.refreshBtn}>
-  //         <Text style={styles.refreshText}>Reload page</Text>
-  //       </View>
-  //     </TouchableWithoutFeedback>
-  //   </View>
-  // )
+  let container = (
+    <View style={styles.errorScreen}>
+      <LottieView source={require('../ASSETS/12701-no-internet-connection.json')} autoPlay loop />
+      <TouchableWithoutFeedback onPress={reload}>
+        <View style={styles.refreshBtn}>
+          <Text style={styles.refreshText}>Reload page</Text>
+        </View>
+      </TouchableWithoutFeedback>
+    </View>
+  )
   
-  const container = (
+  if(props.posts) container = (
     <SafeAreaView style={styles.container}>{returnScrollView()}</SafeAreaView>
   )
 
-  return container
+  return (
+    <>
+      {props.loading ? <LoadingScreen /> : container }
+    </>
+  )
 };
 
 const mapStateToProps = state => {
   return{
-    posts: state.posts
+    posts: state.posts,
+    loading: state.loading2
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return{
-
+    setReload: () => dispatch({type: 'RELOAD'})
   }
 }
 

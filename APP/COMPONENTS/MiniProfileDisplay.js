@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
 import Details from './utilities/Details';
 import ProfileName from './utilities/ProfileName';
 import LinearGradient from 'react-native-linear-gradient'; // import LinearGradient
@@ -12,6 +12,8 @@ export default function MiniProfileDisplay({
   department = 'Edu English',
   level = '400',
   extraStyles,
+  value,
+  updateArray
 }){
   const emptyImage = (
     <View style={styles.emptyImage}>
@@ -19,28 +21,30 @@ export default function MiniProfileDisplay({
     </View>
   )
   return (
-    <View style={styles.MiniProfileDisplay}>
-      {image ? 
-        <Image source={{uri: `https://res.cloudinary.com/dyojwpsfb/${image}`}} style={styles.image} resizeMode={'cover'} />
-        : emptyImage }
-      <LinearGradient
-        colors={['rgba(6,6,6,0.4738095067128414)', 'rgba(2,0,36,1)']}
-        style={[styles.linearGradient, styles.initialsWrapper]}>
-        <ProfileName username={username} extraStyles={{color: colors.white}} />
-        <Details
-          department={department}
-          level={level}
-          extraStyles={{color: colors.white}}
-        />
-      </LinearGradient>
-    </View>
+    <TouchableWithoutFeedback onPress={() => updateArray(value)}>
+      <View style={styles.MiniProfileDisplay}>
+        {image ? 
+          <Image source={{uri: `https://res.cloudinary.com/dyojwpsfb/${image}`}} style={styles.image} resizeMode={'cover'} />
+          : emptyImage }
+        <LinearGradient
+          colors={['rgba(6,6,6,0.4738095067128414)', 'rgba(2,0,36,1)']}
+          style={[styles.linearGradient, styles.initialsWrapper]}>
+          <ProfileName username={username} extraStyles={{color: colors.white}} />
+          <Details
+            department={department}
+            level={level}
+            extraStyles={{color: colors.white}}
+          />
+        </LinearGradient>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
   MiniProfileDisplay: {
-    height: 400,
-    width: 250,
+    height: 300,
+    width: '49%',
     flexWrap: 'wrap',
     margin: 2,
   },
