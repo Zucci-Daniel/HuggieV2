@@ -18,6 +18,7 @@ import AppStatusBar from '../COMPONENTS/AppStatusBar';
 import Icons from 'react-native-vector-icons/Ionicons';
 import Icons2 from 'react-native-vector-icons/FontAwesome5';
 import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
+import SearchScreen from '../SCREENS/SearchScreen';
 
 const iconConfig = {
   // color:colors.brandColor,
@@ -28,94 +29,98 @@ const unfocused = 'rgba(234, 82, 160, 1.63)';
 const BottomTab = createBottomTabNavigator();
 
 export default function InsideApp() {
+  const container = (
+    <NavigationContainer>
+    <BottomTab.Navigator
+      screenOptions={({route}) => ({
+        title: '',
+        header: ({navigation}) => <AppHeader></AppHeader>,
+        tabBarStyle: [
+          {
+            ...styles.BottomBarStyles,
+          },
+        ],
+        tabBarLabel: '',
+      })}>
+      <BottomTab.Screen
+        name="HotTabNav"
+        component={HotTabNav}
+        options={{
+          tabBarColor: '#009387',
+          tabBarIcon: ({color, size, focused, style}) => (
+            <View style={styles.iconView}>
+              <Icons
+                name="ios-heart-sharp"
+                color={focused ? colors.white : colors.brandColor}
+                size={focused ? scale(20) : size}
+                style={focused ? styles.iconFocused : styles.iconUnFocused}
+              />
+            </View>
+          ),
+        }}
+      />
+
+      <BottomTab.Screen
+        name="SentRequest"
+        component={SentRequestNav}
+        options={({route}) => ({
+          tabBarIcon: ({color, size, focused, style}) => (
+            <View style={styles.iconView}>
+              <Icons
+                name="ios-chatbubbles"
+                color={focused ? colors.white : colors.brandColor}
+                size={focused ? scale(20) : size}
+                style={focused ? styles.iconFocused : styles.iconUnFocused}
+              />
+            </View>
+          ),
+        })}
+      />
+      <BottomTab.Screen
+        name="MyRequest"
+        component={MyRequestNav}
+        options={{
+          tabBarIcon: ({color, size, focused, style}) => (
+            <View style={styles.iconView}>
+              <Icons2
+                name="grin-hearts"
+                color={focused ? colors.white : colors.brandColor}
+                size={focused ? scale(20) : size}
+                style={focused ? styles.iconFocused : styles.iconUnFocused}
+              />
+            </View>
+          ),
+        }}
+      />
+
+      <BottomTab.Screen
+        name="MyProfileNav"
+        component={MyProfileNav}
+        options={({route}) => ({
+          tabBarIcon: ({color, size, focused, style}) => (
+            <View style={styles.iconView}>
+              <Icons2
+                name="user-alt"
+                color={focused ? colors.white : colors.brandColor}
+                size={focused ? scale(20) : size}
+                style={[
+                  focused ? styles.iconFocused : styles.iconUnFocused,
+                  styles.sentToTop,
+                ]}
+              />
+            </View>
+          ),
+        })}
+      />
+    </BottomTab.Navigator>
+  </NavigationContainer>
+  )
   return (
     <>
       <AppStatusBar backgroundColor={colors.brandColor} />
 
-      <NavigationContainer>
-        <BottomTab.Navigator
-          screenOptions={({route}) => ({
-            title: '',
-            header: ({navigation}) => <AppHeader></AppHeader>,
-            tabBarStyle: [
-              {
-                ...styles.BottomBarStyles,
-              },
-            ],
-            tabBarLabel: '',
-          })}>
-          <BottomTab.Screen
-            name="HotTabNav"
-            component={HotTabNav}
-            options={{
-              tabBarColor: '#009387',
-              tabBarIcon: ({color, size, focused, style}) => (
-                <View style={styles.iconView}>
-                  <Icons
-                    name="ios-heart-sharp"
-                    color={focused ? colors.white : colors.brandColor}
-                    size={focused ? scale(20) : size}
-                    style={focused ? styles.iconFocused : styles.iconUnFocused}
-                  />
-                </View>
-              ),
-            }}
-          />
-
-          <BottomTab.Screen
-            name="SentRequest"
-            component={SentRequestNav}
-            options={({route}) => ({
-              tabBarIcon: ({color, size, focused, style}) => (
-                <View style={styles.iconView}>
-                  <Icons
-                    name="ios-chatbubbles"
-                    color={focused ? colors.white : colors.brandColor}
-                    size={focused ? scale(20) : size}
-                    style={focused ? styles.iconFocused : styles.iconUnFocused}
-                  />
-                </View>
-              ),
-            })}
-          />
-          <BottomTab.Screen
-            name="MyRequest"
-            component={MyRequestNav}
-            options={{
-              tabBarIcon: ({color, size, focused, style}) => (
-                <View style={styles.iconView}>
-                  <Icons2
-                    name="grin-hearts"
-                    color={focused ? colors.white : colors.brandColor}
-                    size={focused ? scale(20) : size}
-                    style={focused ? styles.iconFocused : styles.iconUnFocused}
-                  />
-                </View>
-              ),
-            }}
-          />
-
-          <BottomTab.Screen
-            name="MyProfileNav"
-            component={MyProfileNav}
-            options={({route}) => ({
-              tabBarIcon: ({color, size, focused, style}) => (
-                <View style={styles.iconView}>
-                  <Icons2
-                    name="user-alt"
-                    color={focused ? colors.white : colors.brandColor}
-                    size={focused ? scale(20) : size}
-                    style={[
-                      focused ? styles.iconFocused : styles.iconUnFocused,
-                      styles.sentToTop,
-                    ]}
-                  />
-                </View>
-              ),
-            })}
-          />
-        </BottomTab.Navigator>
-      </NavigationContainer>
+      
+      <SearchScreen />
     </>
   );
 }

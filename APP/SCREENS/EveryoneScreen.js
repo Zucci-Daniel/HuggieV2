@@ -12,20 +12,37 @@ import axios from 'axios';
 
 import LoadingScreen from '../COMPONENTS/loadingScreen';
 import LottieView from 'lottie-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { template } from '@babel/core';
+
+const Defaultlink = 'https://huggie.herokuapp.com/api/profiles/';
 
 function EveryOneScreen(props) {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState();
 
+  const [link, setLink] = useState(Defaultlink);
+
   useEffect(() => {
-    fetchPosts();
-    console.log(props.reload)
-  }, [props.reload])
+    init();
+    // console.log(props.reload)
+  }, [props.reload]);
+
+  const init = async() => {
+    try {
+      const inst = await AsyncStorage.getItem('@searchInst');
+      const lev = await AsyncStorage.getItem('@searchLev');
+      // const sex = await AsyncStorage.getitem('sex');
+
+      console.log(inst, lev)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const fetchPosts = async() => {
     props.setLoading(true)
-    axios.get('https://huggie.herokuapp.com/api/profiles/')
+    axios.get(link)
       .then(r => {
           console.log('fetched')
           setPosts(r.data.results);

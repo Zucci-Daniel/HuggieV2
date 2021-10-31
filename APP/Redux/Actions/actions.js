@@ -104,7 +104,6 @@ export const login = (data) => {
                 const id = response.data.id;
                 AsyncStorage.setItem('@id', id.toString());
                 AsyncStorage.setItem('loginId', response.data.token);
-                console.log('successful', response.data.token);
                 dispatch(setLoading(false));
                 dispatch(signup(response.data.token));
             })
