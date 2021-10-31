@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, Image, TextInput, TouchableWithoutFeedback } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Search from '../ASSETS/lens.png'
 import SelectorDiv from '../COMPONENTS/utilities/SelectorDiv';
@@ -17,7 +18,7 @@ const institutions = [
     'College',
 ]
 
-function SearchScreen(props) {
+function SearchScreen({closeDiv}) {
     const [active, setActive] = useState('female');
 
     const [Universities, setUniversities] = useState();
@@ -76,8 +77,14 @@ function SearchScreen(props) {
         }
     }
 
-    const submit = () => {
-        console.log(fullUniv, active, lev)
+    const submit = async () => {
+        AsyncStorage.setItem('@searchInst', fullUniv);
+        AsyncStorage.setItem('@searchLev', lev);
+        AsyncStorage.setItem('@sex', active);
+        
+        // const data = await AsyncStorage.getItem('@sex')
+        // console.log(typeof(data))
+        closeDiv();
     }
 
     let div = (

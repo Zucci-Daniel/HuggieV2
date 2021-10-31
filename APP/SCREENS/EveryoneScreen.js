@@ -32,17 +32,21 @@ function EveryOneScreen(props) {
     try {
       const inst = await AsyncStorage.getItem('@searchInst');
       const lev = await AsyncStorage.getItem('@searchLev');
-      // const sex = await AsyncStorage.getitem('sex');
+      const gender = await AsyncStorage.getItem('@sex')
 
-      console.log(inst, lev)
+      const newLink = Defaultlink + '?q=' + gender
+      console.log(newLink)
+      setLink(newLink);
+      fetchPosts(newLink)
+      // console.log(inst, lev, gender)
     } catch (error) {
       console.log(error)
     }
   }
 
-  const fetchPosts = async() => {
+  const fetchPosts = async(newLink) => {
     props.setLoading(true)
-    axios.get(link)
+    axios.get(newLink)
       .then(r => {
           console.log('fetched')
           setPosts(r.data.results);

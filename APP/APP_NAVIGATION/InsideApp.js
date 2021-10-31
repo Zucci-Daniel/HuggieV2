@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {StyleSheet, Text, View, Dimensions} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -29,6 +29,11 @@ const unfocused = 'rgba(234, 82, 160, 1.63)';
 const BottomTab = createBottomTabNavigator();
 
 export default function InsideApp() {
+  const [show, setShow] = useState(true);
+
+  const closeDiv = () => {
+    setShow(false)
+  }
   const container = (
     <NavigationContainer>
     <BottomTab.Navigator
@@ -59,7 +64,6 @@ export default function InsideApp() {
           ),
         }}
       />
-
       <BottomTab.Screen
         name="SentRequest"
         component={SentRequestNav}
@@ -92,7 +96,6 @@ export default function InsideApp() {
           ),
         }}
       />
-
       <BottomTab.Screen
         name="MyProfileNav"
         component={MyProfileNav}
@@ -118,9 +121,7 @@ export default function InsideApp() {
   return (
     <>
       <AppStatusBar backgroundColor={colors.brandColor} />
-
-      
-      <SearchScreen />
+      {show ? <SearchScreen closeDiv={closeDiv} /> : container}
     </>
   );
 }
