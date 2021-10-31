@@ -34,7 +34,7 @@ function EveryOneScreen(props) {
       const lev = await AsyncStorage.getItem('@searchLev');
       const gender = await AsyncStorage.getItem('@sex')
 
-      const newLink = Defaultlink + '?q=' + gender + ' ' + inst
+      const newLink = Defaultlink + '?q=' + gender + ' ' + inst + ' ' + lev
       console.log(newLink)
       setLink(newLink);
       fetchPosts(newLink)
