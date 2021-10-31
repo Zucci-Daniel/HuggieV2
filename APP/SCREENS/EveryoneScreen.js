@@ -13,13 +13,14 @@ import axios from 'axios';
 import LoadingScreen from '../COMPONENTS/loadingScreen';
 import LottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import EmptyDiv from '../COMPONENTS/EmptyDiv';
 // import { template } from '@babel/core';
 
 const Defaultlink = 'https://huggie.herokuapp.com/api/profiles/';
 
 function EveryOneScreen(props) {
   const [loading, setLoading] = useState(true);
-  const [posts, setPosts] = useState();
+  const [posts, setPosts] = useState([]);
 
   const [link, setLink] = useState(Defaultlink);
 
@@ -94,7 +95,7 @@ function EveryOneScreen(props) {
     </View>
   )
 
-  if(posts){
+  if(posts.length !== 0){
     container = (
       <Screen extraStyles={styles.ScreenExtraStyles}>
         <FlatList
@@ -112,6 +113,10 @@ function EveryOneScreen(props) {
         }
         />
       </Screen>
+    )
+  }else{
+    container = (
+      <EmptyDiv />
     )
   }
 

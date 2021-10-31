@@ -30,6 +30,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated';
 import axios from 'axios';
+import EmptyDiv from '../COMPONENTS/EmptyDiv';
 
 
 function HotlistsScreen(props) {
@@ -76,7 +77,11 @@ function HotlistsScreen(props) {
     props.setReload(number);
   }
 
-  const returnScrollView = () => {
+  let returnScrollView = () => {
+    return <Text>Hello</Text>
+  }
+  if(props.posts){
+  returnScrollView = () => {
     return (
       <TapGestureHandler numberOfTaps={2} onActivated={showSentAnimation}>
         <Animated.View>
@@ -116,7 +121,8 @@ function HotlistsScreen(props) {
         </Animated.View>
       </TapGestureHandler>
     );
-  };
+  }
+}
   
   let container = (
     <View style={styles.errorScreen}>
@@ -129,9 +135,14 @@ function HotlistsScreen(props) {
     </View>
   )
   
-  if(props.posts) container = (
+  if(props.posts.length !== 0){
+     container = (
     <SafeAreaView style={styles.container}>{returnScrollView()}</SafeAreaView>
-  )
+  )}else{
+    container = (
+      <EmptyDiv />
+    )
+  }
 
   return (
     <>
