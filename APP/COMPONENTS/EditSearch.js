@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableWithoutFeedback } from 'react-native';
-import { scale, ScaledSheet} from 'react-native-size-matters';
+import { View, StyleSheet, Text, Modal, TextInput, TouchableWithoutFeedback } from 'react-native';
 import DropDown from './utilities/DropDown';
-import DropDownModal from './utilities/DropDownModal';
 
+import IonicIcon from 'react-native-vector-icons/MaterialIcons';
 import uni from '../ASSETS/uni.json';
-import IonicIcon from 'react-native-vector-icons/Ionicons';
+import DropDownModal from './utilities/DropDownModal';
+import { scale } from 'react-native-size-matters';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const U1 = 'University';
 const U2 = 'Polythecnic';
@@ -17,19 +18,20 @@ const institutions = [
     'College',
 ]
 
-function EditUserDetailsScreen({closeModal, postUpdatedDetails}) {
+function EditSearch({data}) {
+    const [edit, setEdit] = useState(false);
     const [Universities, setUniversities] = useState();
-
     const [items, setItems] = useState();
     const [inst, setInst] = useState('University');
     const [univ, setUniv] = useState();
     const [fullUniv, setFullUniv] = useState();
-    const [dept, setDept] = useState();
     const [lev, setLev] = useState();
+
+    const [modal, setModal] = useState(false);
 
     const onPress = (data) => {
         setItems(data);
-        console.log(data)
+        setModal(true);
     }
 
     useEffect(() => {
@@ -46,15 +48,26 @@ function EditUserDetailsScreen({closeModal, postUpdatedDetails}) {
         }
     }
 
+    let div = (
+        <DropDown name={!univ ? `select a ${inst}` : univ } width={'75%'} data={Universities} onPress={onPress} />
+    )
+    if(inst === U2){
+        div = <DropDown name={!univ ? `select a ${inst}` : univ } width={'75%'} data={Universities} onPress={onPress} />
+    }else if(inst === U3){
+        div = <DropDown name={!univ ? `select a ${inst}` : univ } width={'75%'} data={Universities} onPress={onPress} />
+    }
+
     const drop1 = (name) => {
         if(name === U1 || name === U2 || name === U3){
             setTimeout(() => {
                 setItems();
+                setModal(false);
                 setInst(name)
             }, 100)
         }else{
             setTimeout(() => {
                 setItems();
+                setModal(false)
                 nameShotter(name)
             }, 100)
         }
@@ -73,20 +86,17 @@ function EditUserDetailsScreen({closeModal, postUpdatedDetails}) {
     }
 
     const submit = () => {
-        postUpdatedDetails(fullUniv, dept, lev)
+        if(fullUniv && lev){
+            AsyncStorage.setItem('@searchInst', fullUniv);
+            AsyncStorage.setItem('@searchLev', lev);
+            setEdit(false)
+        }else{
+            alert('Input fields cannot be left empty')
+        }
     }
 
-    const cancle = () => {
-        closeModal()
-    }
-
-    let div = (
-        <DropDown name={!univ ? `select a ${inst}` : univ } width={'75%'} data={Universities} onPress={onPress} />
-    )
-    if(inst === U2){
-        div = <DropDown name={!univ ? `select a ${inst}` : univ } width={'75%'} data={Universities} onPress={onPress} />
-    }else if(inst === U3){
-        div = <DropDown name={!univ ? `select a ${inst}` : univ } width={'75%'} data={Universities} onPress={onPress} />
+    const cancle = async() => {
+        setEdit(false);
     }
 
     const button2 = (
@@ -104,54 +114,64 @@ function EditUserDetailsScreen({closeModal, postUpdatedDetails}) {
         </View>
     )
 
-    return (
-        <>
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.headerText}>Edit School Details</Text>
-                <View style={styles.headerLine} />
+    const container = (
+        <TouchableWithoutFeedback onPress={() => setEdit(true)}>
+            <View style={styles.container}>
+                <View style={styles.headerContainer}>
+                    <Text style={{fontSize: 15, color: '#000'}}>Filter Search</Text>
+                    <IonicIcon name='filter' size={16} color='#000' style={{marginLeft: 14}} />
+                </View>
+                <View style={styles.div}>
+                    <Text style={{color: '#000', fontSize: 15, opacity: 0.8}}>Universities: {data[0]}</Text>
+                </View>
+                <View style={styles.div}>
+                    <Text style={{color: '#000', fontSize: 15, opacity: 0.8}}>levels: {data[1]}</Text>
+                </View>
             </View>
-            <View style={{marginTop: 20}}>
+        </TouchableWithoutFeedback>
+    )
+    const editableDiv = (
+        <>
+            <View style={styles.editableDiv}>
                 <DropDown name='University' width={'60%'} data={institutions} onPress={onPress} />
                 {div}
-                <TextInput placeholder='Department' style={styles.input} placeholderTextColor={'#000'} onChangeText={(text) => setDept(text) } />
                 <TextInput placeholder='Level' keyboardType='numeric' style={[styles.input, {width: 100}]} placeholderTextColor={'#000'} onChangeText={(text) => setLev(text)} />
             </View>
-            <View style={styles.submitButtons}>
-                {button2}
-            </View>
-        </View>
-        {items ? <DropDownModal data={items} onPress={drop1} /> : null }
+            <Modal visible={modal} style={{backgroundColor: '#000'}}>
+                <DropDownModal data={items} onPress={drop1} />
+            </Modal>
+            {button2}
+        </>
+    )
+    return (
+        <>
+            {!edit ? container : editableDiv }
         </>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        height: '100%',
         width: '100%',
-        backgroundColor: '#fff',
-        position: 'absolute',
-        top: 0
+        marginTop: 30
     },
-    header: {
-        height: scale(60),
+    headerContainer: {
+        height: 30,
         width: '100%',
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginBottom: 4
     },
-    headerText: {
-        color: '#000',
-        letterSpacing: 1,
-        fontSize: 17,
-        opacity: 0.8
+    div: {
+        marginVertical: 3,
+        width: '100%',
+        justifyContent: 'center',
+        marginLeft: 15
     },
-    headerLine: {
-        height: scale(4),
-        width: '25%',
-        borderRadius: 10,
-        backgroundColor: '#DE5295',
-        marginTop: scale(10)
+    editableDiv: {
+        width: '100%',
+        marginTop: 30
     },
     input: {
         height: 45,
@@ -164,17 +184,12 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         letterSpacing: 1.5
     },
-    submitButtons: {
-        height: scale(50),
-        width: '100%',
-        marginTop: scale(30)
-    },
     otherBtns: {
-        height: '100%',
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginTop: 10
     },
     cancleBtn: {
         height: scale(40),
@@ -204,4 +219,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default EditUserDetailsScreen;
+export default EditSearch;

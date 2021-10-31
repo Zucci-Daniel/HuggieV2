@@ -23,7 +23,7 @@ function LogoutBtn(props) {
 const styles = StyleSheet.create({
     container: {
         height: scale(50),
-        width: '70%',
+        width: '40%',
         alignItems: 'center',
         alignSelf: 'center',
         justifyContent: 'center',

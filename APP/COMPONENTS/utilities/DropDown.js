@@ -11,7 +11,7 @@ function DropDown({name, width, data, onPress}) {
                     <Text style={styles.Text}>{name}</Text>
                 </View>
                 <View style={{width: '25%', alignItems: 'center', justifyContent: 'center'}}>
-                    <Icons name='down' size={16} color="#000" style={styles.arrow} />
+                    <Icons name='down' size={14} color="#000" style={styles.arrow} />
                 </View>
             </View>
         </TouchableWithoutFeedback>
@@ -31,11 +31,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#f0f0f0'
     },
     Text: {
-        fontSize: scale(17),
+        fontSize: 16,
         letterSpacing: 1.5,
-        fontWeight: '600',
         marginLeft: scale(15),
-        color: '#000'
+        color: '#000',
+        opacity: 0.8
+    },
+    arrow: {
+        opacity: 0.8
     }
 })
 

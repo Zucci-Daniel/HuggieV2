@@ -72,7 +72,8 @@ function HotlistsScreen(props) {
   }, [props.posts]);
 
   const reload = () => {
-    props.setReload();
+    const number = Math.random();
+    props.setReload(number);
   }
 
   const returnScrollView = () => {
@@ -102,6 +103,8 @@ function HotlistsScreen(props) {
                   image={users.profile_pic}
                   level={users.level}
                   dept={users.department}
+                  bio={users.description}
+                  institution={users.institution}
                   onPressDateButton={showSentAnimation}>
                   {[users.attribute_1, users.attribute_2, users.attribute_3, users.attribute_4, users.attribute_5].map((like, index) => (
                     <SelectBox key={index} likes={like} />
@@ -146,7 +149,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return{
-    setReload: () => dispatch({type: 'RELOAD'})
+    setReload: (val) => dispatch({type: 'RELOAD', value: val})
   }
 }
 

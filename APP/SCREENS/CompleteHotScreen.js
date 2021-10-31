@@ -28,6 +28,8 @@ export default function CompleteHotScreen({
   username,
   dept,
   level,
+  bio,
+  institution,
   children,
   onPressDateButton,
   useThisGallery,
@@ -78,7 +80,7 @@ export default function CompleteHotScreen({
             {children}
           </ProfileDisplay>
         </Screen>
-        <HotDetails>
+        <HotDetails data={[institution, bio]}>
           <DateButton
             extraStyle={styles.dateIcon}
             onPress={onPressDateButton}

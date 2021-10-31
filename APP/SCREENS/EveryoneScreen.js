@@ -12,19 +12,41 @@ import axios from 'axios';
 
 import LoadingScreen from '../COMPONENTS/loadingScreen';
 import LottieView from 'lottie-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { template } from '@babel/core';
+
+const Defaultlink = 'https://huggie.herokuapp.com/api/profiles/';
 
 function EveryOneScreen(props) {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState();
 
-  useEffect(() => {
-    fetchPosts()
-  }, [props.reload])
+  const [link, setLink] = useState(Defaultlink);
 
-  const fetchPosts = async() => {
+  useEffect(() => {
+    init();
+    // console.log(props.reload)
+  }, [props.reload]);
+
+  const init = async() => {
+    try {
+      const inst = await AsyncStorage.getItem('@searchInst');
+      const lev = await AsyncStorage.getItem('@searchLev');
+      const gender = await AsyncStorage.getItem('@sex')
+
+      const newLink = Defaultlink + '?q=' + gender + ' ' + inst
+      console.log(newLink)
+      setLink(newLink);
+      fetchPosts(newLink)
+      // console.log(inst, lev, gender)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const fetchPosts = async(newLink) => {
     props.setLoading(true)
-    axios.get('https://huggie.herokuapp.com/api/profiles/')
+    axios.get(newLink)
       .then(r => {
           console.log('fetched')
           setPosts(r.data.results);
@@ -57,7 +79,8 @@ function EveryOneScreen(props) {
   }
 
   const reload = () => {
-    props.setReload();
+    const number = Math.random();
+    props.setReload(number);
   }
 
   let container  = (
@@ -109,7 +132,7 @@ const mapDispatchToProps = dispatch => {
   return{
     setPost: (val) => dispatch({type: 'POSTS', value: val}),
     setLoading: (val) => dispatch({type: 'LOADING2', value: val}),
-    setReload: () => dispatch({type: 'RELOAD'})
+    setReload: (val) => dispatch({type: 'RELOAD', value: val})
   }
 }
 
