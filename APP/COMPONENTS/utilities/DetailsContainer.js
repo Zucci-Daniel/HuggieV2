@@ -19,7 +19,7 @@ function DetailsContainer({description, editDetails}) {
         <TouchableWithoutFeedback onPress={edit}>
             <View style={styles.detailsContainer}>
                 <View style={styles.textContainer}>
-                    <Text>{description}</Text>
+                    <Text style={{color: '#000'}}>{description}</Text>
                 </View>
                 <View style={styles.iconContainer}>
                     <IonicIcons name='pencil' color='#000' size={20} />
@@ -59,14 +59,14 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         width: '90%',
-        opacity: 0.7,
+        opacity: 0.9,
         paddingLeft: 10,
     },
     iconContainer: {
         width: '10%',
         alignItems: 'center',
         justifyContent: 'center',
-        opacity: 0.9
+        opacity: 0.8
     },
     detailsContainer2: {
         width: '100%',

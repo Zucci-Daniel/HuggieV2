@@ -310,7 +310,7 @@ export default function GalleryProfilePictureScreen() {
         <ScrollView >
             <View style={styles.GalleryProfilePicture}>
                 {container}
-                <EditSearch />
+                <EditSearch data={[userData.institution, userData.level]} />
                 <LogoutBtn />
             </View>
             {loading ? <LoadingScreen /> : null}
@@ -326,7 +326,7 @@ const styles = ScaledSheet.create({
         height: '100%',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        padding: scale(10)
+        padding: scale(10),
     },
     picture: {
         width: '95%',

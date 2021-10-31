@@ -44,7 +44,6 @@ function EditUserDetailsScreen({closeModal, postUpdatedDetails}) {
             });
             setUniversities(arr)
         }
-        
     }
 
     const drop1 = (name) => {
