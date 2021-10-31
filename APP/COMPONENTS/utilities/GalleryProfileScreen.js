@@ -327,6 +327,7 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         padding: scale(10),
+        backgroundColor: '#fff'
     },
     picture: {
         width: '95%',
