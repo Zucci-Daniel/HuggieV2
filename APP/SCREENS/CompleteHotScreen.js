@@ -22,36 +22,17 @@ import {scale, ScaledSheet} from 'react-native-size-matters';
 import ImageLayout from 'react-native-image-layout';
 
 ////
-const galleryImages = [
-  {
-    source: require('../ASSETS/black.jpg'),
-  },
-  {
-    source: require('../ASSETS/black.jpg'),
-  },
-  {
-    source: require('../ASSETS/black.jpg'),
-  },
-  {
-    source: require('../ASSETS/black.jpg'),
-  },
-  {
-    source: require('../ASSETS/black.jpg'),
-  },
-  {
-    source: require('../ASSETS/blueGirl.jpg'),
-  },
-];
-
 
 export default function CompleteHotScreen({
   image,
   username,
   dept,
   level,
+  bio,
+  institution,
   children,
   onPressDateButton,
-  useThisGallery=galleryImages,
+  useThisGallery,
   verified
 }) {
  
@@ -72,9 +53,9 @@ export default function CompleteHotScreen({
           {useThisGallery.map((image, index) => (
             <AppHotImage
               key={index * Math.random() * Math.random()}
-              image={image.source}
+              image={image}
               onPress={() => {
-                setSelectedPic(image.source);
+                setSelectedPic(image);
                 setShowModal(true);
                 console.log(image.source, 'this is it now');
               }}
@@ -83,14 +64,14 @@ export default function CompleteHotScreen({
           <Modal visible={showModal} onRequestClose={() => setShowModal(false)}>
             <View style={styles.modalViewStyle}>
               <View style={styles.modalImageWrapper}>
-                <Image source={selectedPic} style={styles.modalImage} />
+                <Image source={{uri: `https://res.cloudinary.com/dyojwpsfb/${selectedPic}`}} style={styles.modalImage} />
               </View>
             </View>
           </Modal>
         </HotGallery>
         <Screen innerRef={middle} extraStyles={styles.screenStyle}>
           <ProfileDisplay
-          verified={verified}
+            verified={verified}
             extraStyles={styles.ProfileDisplayExtra}
             image={image}
             username={username}
@@ -99,7 +80,7 @@ export default function CompleteHotScreen({
             {children}
           </ProfileDisplay>
         </Screen>
-        <HotDetails>
+        <HotDetails data={[institution, bio]}>
           <DateButton
             extraStyle={styles.dateIcon}
             onPress={onPressDateButton}

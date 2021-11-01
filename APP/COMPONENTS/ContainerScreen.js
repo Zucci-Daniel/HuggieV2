@@ -1,18 +1,23 @@
 import React, {useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { connect } from 'react-redux';
+import { View } from 'react-native';
 
 import SignupScreen2 from '../SCREENS/SignupScreen2';
-import SignupScreen3 from '../SCREENS/SignupScreen3'
-import LogoutBtn from './utilities/LogoutBtn';
+import SignupScreen3 from '../SCREENS/SignupScreen3';
 import InsideApp from '../APP_NAVIGATION/InsideApp';
 
-function ContainerScreen() {
-    const [screen, setScreen] = useState(1);
+function ContainerScreen(props) {
+    const [screen, setScreen] = useState();
     const [data, setData] = useState();
 
-    useEffect(() => {
-        newFunc()
-    }, []);
+    // useEffect(() => {
+    //     newFunc()
+    // }, []);
+
+    // useEffect(() => {
+    //     console.log(props.screen)
+    // }, [props.screen])
 
     const newFunc = async () => {
         const datae = await AsyncStorage.getItem('loginId');
@@ -22,7 +27,7 @@ function ContainerScreen() {
     }
 
     const changeScreen = (value, paraData) => {
-        setScreen(value);
+        props.setScreen(2);
         setData(paraData);
     }
 
@@ -34,16 +39,29 @@ function ContainerScreen() {
     if(screen === 2){
         div = (
             <>
-                {data ? <SignupScreen3 data={data} clearScreen={() => setScreen()} /> : null }
+                {data ? <SignupScreen3 data={data} clearScreen={props.clearScreen(null)} /> : null }
             </>
         )
     }
 
     return (
         <>
-            {screen ? div: <InsideApp/>}
+            {!props.screen ? <InsideApp/> : div }
+            {/* <View style={{backgroundColor: 'red', height: '100%', width: '100%'}}></View> */}
         </>
     );
 }
 
-export default ContainerScreen;
+const mapStateToProps = state => {
+    return{
+        screen: state.screen
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return{
+        clearScreen: (value) => dispatch({type: 'SCREEN', value: value})
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContainerScreen);

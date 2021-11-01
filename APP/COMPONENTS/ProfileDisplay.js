@@ -17,9 +17,9 @@ export default function ProfileDisplay({
   return (
     <View style={[styles.ProfileDisplay, extraStyles]}>
       <View style={styles.Display}>
-        <Image source={image} style={styles.image} ref={innerRef} />
+        <Image source={{uri: `https://res.cloudinary.com/dyojwpsfb/${image}`}} style={styles.image} ref={innerRef} />
         <UserShowCaseInitials
-        verified={verified}
+          verified={verified}
           username={username}
           dept={dept}
           level={level}

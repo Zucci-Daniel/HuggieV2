@@ -2,7 +2,7 @@ import React from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import colors from '../config/colors'
 
-export default function HotDetails({ children }) {
+export default function HotDetails({ children, data}) {
     return (
         <View style={styles.container}>
             <View style={styles.titleWrapper}>
@@ -12,13 +12,13 @@ export default function HotDetails({ children }) {
             </View>
                 <Text 
                 style={styles.university}
-                >Imo State University</Text>
+                >{data[0]}</Text>
                 <Text 
                 style={styles.about}
                 >About Me</Text>
                 <Text 
                 style={styles.bio}
-                >If you're handsome, its a green light thing... anyways i love petting animals, i'm kind of tricky sometimes, but trust me, you'd love the hell out of me if you see me cry</Text>
+                >{data[1]}</Text>
 
                 {children}
         </View>
