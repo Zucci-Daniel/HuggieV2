@@ -3,7 +3,7 @@ import MasonryList from 'react-native-masonry-list';
 import ImageLayout from 'react-native-image-layout';
 //...
 import MiniProfileDisplay from '../COMPONENTS/MiniProfileDisplay';
-import {FlatList, Image,StyleSheet, Text, View ,TouchableWithoutFeedback, ScrollView} from 'react-native';
+import {FlatList, Image,StyleSheet, Text, View ,TouchableWithoutFeedback} from 'react-native';
 import Screen from '../COMPONENTS/Screen';
 import { scale } from 'react-native-size-matters';
 import {connect} from 'react-redux';
@@ -20,9 +20,11 @@ const Defaultlink = 'https://huggie.herokuapp.com/api/profiles/';
 
 function EveryOneScreen(props) {
   const [loading, setLoading] = useState(true);
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState();
 
   const [link, setLink] = useState(Defaultlink);
+  const [next, setNext] = useState();
+  const [fetch, setFetch] = useState(false)
 
   useEffect(() => {
     init();
@@ -35,10 +37,10 @@ function EveryOneScreen(props) {
       const lev = await AsyncStorage.getItem('@searchLev');
       const gender = await AsyncStorage.getItem('@sex')
 
-      // const newLink = Defaultlink + '?q=' + gender + ' ' + inst + ' ' + lev
-      // console.log(newLink)
-      // setLink(newLink);
-      fetchPosts(Defaultlink)
+      const newLink = Defaultlink + '?q=' + gender
+      console.log(newLink)
+      setLink(newLink);
+      fetchPosts(newLink)
       // console.log(inst, lev, gender)
     } catch (error) {
       console.log(error)
@@ -49,8 +51,15 @@ function EveryOneScreen(props) {
     props.setLoading(true)
     axios.get(newLink)
       .then(r => {
-          console.log('fetched')
-          setPosts(r.data.results);
+          if(r.data.next){
+            setNext(r.data.next)
+          }
+          console.log(r.data.next, 'fetched');
+          const arr = [...posts];
+          r.data.results.forEach(element => {
+            arr.push(element)
+          });
+          setPosts(arr);
           props.setPost(r.data.results);
           setLoading(false);
           props.setLoading(false)
@@ -84,6 +93,16 @@ function EveryOneScreen(props) {
     props.setReload(number);
   }
 
+  const fetchnewPosts = () => {
+    setFetch(true)
+  }
+
+  const newDiv = (
+    <View style={styles.loadNewPosts}>
+        <Text style={styles.reloadText}>Fetching posts...</Text>
+      </View>
+  )
+
   let container  = (
     <View style={styles.errorScreen}>
       <LottieView source={require('../ASSETS/12701-no-internet-connection.json')} autoPlay loop />
@@ -111,19 +130,18 @@ function EveryOneScreen(props) {
             updateArray={updateArray}
           />
         }
+        onEndReached={fetchnewPosts}
         />
+        {fetch ? newDiv : null}
       </Screen>
     )
-  }else{
-    container = (
-      <EmptyDiv />
-    )
+  }else if(posts && posts.length === 0){
+    container = <EmptyDiv />
   }
 
   return (
     <>
       {!loading ? container : <LoadingScreen /> }
-      <View style={{height: 100, width: '100%', backgroundColor: 'red'}} />
     </>
   );
 }
@@ -146,9 +164,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(EveryOneScreen)
 
 const styles=StyleSheet.create({
   ScreenExtraStyles:{
-    paddingBottom:'40%',
+    // paddingBottom:'40%',
     justifyContent:'center',
     alignItems:'center',
+    marginBottom: 100
   },
   errorScreen: {
     height: '100%',
@@ -172,5 +191,21 @@ const styles=StyleSheet.create({
     fontSize: scale(16),
     color: '#DE5295',
     letterSpacing: 1
+  },
+  loadNewPosts: {
+    height: 50,
+    width: 170,
+    backgroundColor: 'rgba(225,225,225,0.6)',
+    borderRadius: 25,
+    position: 'absolute',
+    bottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  reloadText: {
+    fontSize: 14,
+    color: '#000',
+    opacity: 0.7,
+    letterSpacing: 1.5
   }
 })

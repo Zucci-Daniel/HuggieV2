@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         // flex:1,
         backgroundColor:colors.white,
         width:'100%',
-        height:Dimensions.get('window').height
+        height:Dimensions.get('window').height - 170
 
     }
 })
