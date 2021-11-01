@@ -75,7 +75,8 @@ function HotlistsScreen(props) {
 
 
   useEffect(() => {
-  showTipAnimation()
+  showTipAnimation();
+  console.log(props.posts)
   }, []);
 
   useEffect(() => {
@@ -148,12 +149,23 @@ function HotlistsScreen(props) {
     </View>
   )
   
-  if(props.posts.length !== 0){
+  if(props.posts){
      container = (
     <SafeAreaView style={styles.container}>{returnScrollView()}</SafeAreaView>
-  )}else{
+  )}else if(props.posts && props.posts.length === 0){
     container = (
       <EmptyDiv />
+    )
+  }else{
+    container = (
+      <View style={styles.errorScreen}>
+      <LottieView source={require('../ASSETS/12701-no-internet-connection.json')} autoPlay loop />
+      <TouchableWithoutFeedback onPress={reload}>
+        <View style={styles.refreshBtn}>
+          <Text style={styles.refreshText}>Reload page</Text>
+        </View>
+      </TouchableWithoutFeedback>
+    </View>
     )
   }
 
