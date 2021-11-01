@@ -3,7 +3,7 @@ import MasonryList from 'react-native-masonry-list';
 import ImageLayout from 'react-native-image-layout';
 //...
 import MiniProfileDisplay from '../COMPONENTS/MiniProfileDisplay';
-import {FlatList, Image,StyleSheet, Text, View ,TouchableWithoutFeedback} from 'react-native';
+import {FlatList, Image,StyleSheet, Text, View ,TouchableWithoutFeedback, ScrollView} from 'react-native';
 import Screen from '../COMPONENTS/Screen';
 import { scale } from 'react-native-size-matters';
 import {connect} from 'react-redux';
@@ -35,10 +35,10 @@ function EveryOneScreen(props) {
       const lev = await AsyncStorage.getItem('@searchLev');
       const gender = await AsyncStorage.getItem('@sex')
 
-      const newLink = Defaultlink + '?q=' + gender + ' ' + inst + ' ' + lev
-      console.log(newLink)
-      setLink(newLink);
-      fetchPosts(newLink)
+      // const newLink = Defaultlink + '?q=' + gender + ' ' + inst + ' ' + lev
+      // console.log(newLink)
+      // setLink(newLink);
+      fetchPosts(Defaultlink)
       // console.log(inst, lev, gender)
     } catch (error) {
       console.log(error)
@@ -123,6 +123,7 @@ function EveryOneScreen(props) {
   return (
     <>
       {!loading ? container : <LoadingScreen /> }
+      <View style={{height: 100, width: '100%', backgroundColor: 'red'}} />
     </>
   );
 }
