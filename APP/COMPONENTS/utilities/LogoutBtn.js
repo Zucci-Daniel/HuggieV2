@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import {connect} from 'react-redux';
 import * as actionTypes from '../../Redux/Actions/actionTypes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { scale } from 'react-native-size-matters';
 
 function LogoutBtn(props) {
     const logoutButton = async () => {
@@ -12,7 +13,7 @@ function LogoutBtn(props) {
     return (
         <TouchableWithoutFeedback onPress={logoutButton}>
             <View style={styles.container}>
-                <Text style={{color: '#fff'}}>logout</Text>
+                <Text style={{color: '#fff', fontWeight: 'bold', letterSpacing: 1}}>logout</Text>
             </View>
         </TouchableWithoutFeedback>
         
@@ -21,10 +22,15 @@ function LogoutBtn(props) {
 
 const styles = StyleSheet.create({
     container: {
-        height: 100,
-        width: '100%',
-        backgroundColor: 'red',
-        borderRadius: 15
+        height: scale(50),
+        width: '70%',
+        alignItems: 'center',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#DE5295',
+        borderRadius: scale(25),
+        marginBottom: 50,
+        marginTop: 50
     }
 })
 

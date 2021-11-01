@@ -85,6 +85,8 @@ function SignupScreen3({data, clearScreen}) {
         .then(r => {
             setLoading(false);
             console.log(r.data);
+            AsyncStorage.setItem('loginId', 'token');
+            console.lof('successful')
             clearScreen()
         })
         .catch(e => {

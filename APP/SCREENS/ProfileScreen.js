@@ -9,4 +9,3 @@ export default function ProfileScreen() {
     )
 }
 
-const styles = StyleSheet.create({})

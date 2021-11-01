@@ -7,7 +7,7 @@ export default function Details({extraStyles,department,level}) {
     return (
     <>
 <Text  style={[styles.details,extraStyles]}>{department?department:'Dept'} 
-<Text style={styles.fientLine}> | </Text> {level?level:'Level'}L </Text>
+<Text style={styles.fientLine}> | </Text> {level?level:'Level'}</Text>
      </>
     )
 }

@@ -15,9 +15,10 @@ function ContainerScreen() {
     }, []);
 
     const newFunc = async () => {
-        const data = await AsyncStorage.getItem('newScreen');
-        console.log(data)
-        setScreen(data);
+        const datae = await AsyncStorage.getItem('loginId');
+        if(datae){
+            setScreen();
+        };
     }
 
     const changeScreen = (value, paraData) => {
