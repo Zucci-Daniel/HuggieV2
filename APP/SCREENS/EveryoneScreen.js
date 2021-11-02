@@ -3,7 +3,7 @@ import MasonryList from 'react-native-masonry-list';
 import ImageLayout from 'react-native-image-layout';
 //...
 import MiniProfileDisplay from '../COMPONENTS/MiniProfileDisplay';
-import {FlatList, Image,StyleSheet, Text, View ,TouchableWithoutFeedback, ScrollView} from 'react-native';
+import {FlatList, Image,StyleSheet, Text, View ,TouchableWithoutFeedback} from 'react-native';
 import Screen from '../COMPONENTS/Screen';
 import { scale } from 'react-native-size-matters';
 import {connect} from 'react-redux';
@@ -21,12 +21,11 @@ const Defaultlink = 'https://huggie.herokuapp.com/api/profiles/';
 function EveryOneScreen(props) {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
-
-  const [link, setLink] = useState(Defaultlink);
+  const [next, setNext] = useState();
+  const [fetch, setFetch] = useState(false)
 
   useEffect(() => {
     init();
-    // console.log(props.reload)
   }, [props.reload]);
 
   const init = async() => {
@@ -35,32 +34,39 @@ function EveryOneScreen(props) {
       const lev = await AsyncStorage.getItem('@searchLev');
       const gender = await AsyncStorage.getItem('@sex')
 
-      // const newLink = Defaultlink + '?q=' + gender + ' ' + inst + ' ' + lev
-      // console.log(newLink)
-      // setLink(newLink);
-      fetchPosts(Defaultlink)
-      // console.log(inst, lev, gender)
+      const newLink = Defaultlink + '?q=' + gender + ' ' + inst + ' ' + lev
+      fetchPosts(newLink)
     } catch (error) {
       console.log(error)
     }
   }
 
-  const fetchPosts = async(newLink) => {
+  const fetchPosts = async(lnk) => {
     props.setLoading(true)
-    axios.get(newLink)
+    console.log('started')
+    axios.get(lnk)
       .then(r => {
-          console.log('fetched')
-          setPosts(r.data.results);
-          props.setPost(r.data.results);
+          if(r.data.next){
+            setNext(r.data.next)
+          }else{
+            setNext(null)
+          }
+          
           setLoading(false);
-          props.setLoading(false)
+          props.setLoading(false);
+          setFetch(false)
+          const data = r.data.results;
+          const arr = [...posts]
+          data.map(i => arr.push(i))
+          setPosts(arr)
+          props.setPost(arr);
       })
       .catch(e => {
           console.log(e);
           setLoading(false);
-          props.setLoading(false)
+          props.setLoading(false);
+          setFetch(false)
       })
-    console.log('Hello world')
   };
 
   const updateArray = (id) => {
@@ -84,6 +90,19 @@ function EveryOneScreen(props) {
     props.setReload(number);
   }
 
+  const fetchnewPosts = () => {
+    if(next){
+      fetchPosts(next);
+      setFetch(true);
+    }
+  }
+
+  const newDiv = (
+    <View style={styles.loadNewPosts}>
+        <Text style={styles.reloadText}>Fetching profiles...</Text>
+      </View>
+  )
+
   let container  = (
     <View style={styles.errorScreen}>
       <LottieView source={require('../ASSETS/12701-no-internet-connection.json')} autoPlay loop />
@@ -95,7 +114,7 @@ function EveryOneScreen(props) {
     </View>
   )
 
-  if(posts.length !== 0){
+  if(posts){
     container = (
       <Screen extraStyles={styles.ScreenExtraStyles}>
         <FlatList
@@ -111,19 +130,16 @@ function EveryOneScreen(props) {
             updateArray={updateArray}
           />
         }
+        onEndReached={fetchnewPosts}
         />
+        {fetch ? newDiv : null}
       </Screen>
-    )
-  }else{
-    container = (
-      <EmptyDiv />
     )
   }
 
   return (
     <>
       {!loading ? container : <LoadingScreen /> }
-      <View style={{height: 100, width: '100%', backgroundColor: 'red'}} />
     </>
   );
 }
@@ -146,9 +162,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(EveryOneScreen)
 
 const styles=StyleSheet.create({
   ScreenExtraStyles:{
-    paddingBottom:'40%',
+    // paddingBottom:'40%',
     justifyContent:'center',
     alignItems:'center',
+    marginBottom: 100
   },
   errorScreen: {
     height: '100%',
@@ -172,5 +189,21 @@ const styles=StyleSheet.create({
     fontSize: scale(16),
     color: '#DE5295',
     letterSpacing: 1
+  },
+  loadNewPosts: {
+    height: 50,
+    width: 170,
+    backgroundColor: 'rgba(225,225,225,0.6)',
+    borderRadius: 25,
+    position: 'absolute',
+    bottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  reloadText: {
+    fontSize: 14,
+    color: '#000',
+    opacity: 0.7,
+    letterSpacing: 1.5
   }
 })

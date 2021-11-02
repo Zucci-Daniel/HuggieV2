@@ -27,7 +27,7 @@ function GalleryScreenImageComponent({pic, onClick, openImage}) {
         div = (
             <TouchableWithoutFeedback onPress={selected}>
                 <View style={styles.mainContainer}>
-                    <Text>Add Image</Text>
+                    <FontAwesome name='add' size={25} color='#000' style={{opacity: 0.7}} />
                 </View>
             </TouchableWithoutFeedback>
         )

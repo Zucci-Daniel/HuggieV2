@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     Text: {
         fontSize: 17,
         opacity: 0.8,
+        color: '#000',
         paddingLeft: 15,
         letterSpacing : 1,
         width: '85%'
