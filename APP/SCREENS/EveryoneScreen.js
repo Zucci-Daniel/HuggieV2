@@ -21,53 +21,45 @@ const Defaultlink = 'https://huggie.herokuapp.com/api/profiles/';
 function EveryOneScreen(props) {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
-
-  const [link, setLink] = useState(Defaultlink);
   const [next, setNext] = useState();
   const [fetch, setFetch] = useState(false)
 
   useEffect(() => {
     init();
-    // console.log(props.reload)
   }, [props.reload]);
 
   const init = async() => {
     try {
-      // const inst = await AsyncStorage.getItem('@searchInst');
-      // const lev = await AsyncStorage.getItem('@searchLev');
+      const inst = await AsyncStorage.getItem('@searchInst');
+      const lev = await AsyncStorage.getItem('@searchLev');
       const gender = await AsyncStorage.getItem('@sex')
 
-      const newLink = Defaultlink + '?q=' + gender
-      console.log(newLink, 'newLink')
-      setLink(newLink);
+      const newLink = Defaultlink + '?q=' + gender + ' ' + inst + ' ' + lev
       fetchPosts(newLink)
-      // console.log(inst, lev, gender)
     } catch (error) {
       console.log(error)
     }
   }
 
-  const fetchPosts = async(newLink) => {
-    // props.setLoading(true)
+  const fetchPosts = async(lnk) => {
+    props.setLoading(true)
     console.log('started')
-    axios.get(newLink)
+    axios.get(lnk)
       .then(r => {
-          // if(r.data.next){
-          //   setNext(r.data.next)
-          // }
-          // console.log(r.data.next, 'fetched');
-          // const arr = [...posts];
-          // console.log(r.data, 'data')
-          // setPosts(arr);
-          // props.setPost(arr);
+          if(r.data.next){
+            setNext(r.data.next)
+          }else{
+            setNext(null)
+          }
+          
           setLoading(false);
-          // props.setLoading(false);
-          // setFetch(false)
-          console.log(r.data.results);
+          props.setLoading(false);
+          setFetch(false)
           const data = r.data.results;
           const arr = [...posts]
           data.map(i => arr.push(i))
           setPosts(arr)
+          props.setPost(arr);
       })
       .catch(e => {
           console.log(e);
@@ -75,7 +67,6 @@ function EveryOneScreen(props) {
           props.setLoading(false);
           setFetch(false)
       })
-    // console.log('Hello world')
   };
 
   const updateArray = (id) => {
@@ -96,18 +87,19 @@ function EveryOneScreen(props) {
 
   const reload = () => {
     const number = Math.random();
-    // console.log(number)
     props.setReload(number);
   }
 
   const fetchnewPosts = () => {
-    setFetch(true);
-    fetchPosts(next);
+    if(next){
+      fetchPosts(next);
+      setFetch(true);
+    }
   }
 
   const newDiv = (
     <View style={styles.loadNewPosts}>
-        <Text style={styles.reloadText}>Fetching posts...</Text>
+        <Text style={styles.reloadText}>Fetching profiles...</Text>
       </View>
   )
 
