@@ -20,7 +20,7 @@ const Defaultlink = 'https://huggie.herokuapp.com/api/profiles/';
 
 function EveryOneScreen(props) {
   const [loading, setLoading] = useState(true);
-  const [posts, setPosts] = useState();
+  const [posts, setPosts] = useState([]);
 
   const [link, setLink] = useState(Defaultlink);
   const [next, setNext] = useState();
@@ -33,12 +33,12 @@ function EveryOneScreen(props) {
 
   const init = async() => {
     try {
-      const inst = await AsyncStorage.getItem('@searchInst');
-      const lev = await AsyncStorage.getItem('@searchLev');
+      // const inst = await AsyncStorage.getItem('@searchInst');
+      // const lev = await AsyncStorage.getItem('@searchLev');
       const gender = await AsyncStorage.getItem('@sex')
 
       const newLink = Defaultlink + '?q=' + gender
-      console.log(newLink)
+      console.log(newLink, 'newLink')
       setLink(newLink);
       fetchPosts(newLink)
       // console.log(inst, lev, gender)
@@ -48,28 +48,34 @@ function EveryOneScreen(props) {
   }
 
   const fetchPosts = async(newLink) => {
-    props.setLoading(true)
+    // props.setLoading(true)
+    console.log('started')
     axios.get(newLink)
       .then(r => {
-          if(r.data.next){
-            setNext(r.data.next)
-          }
-          console.log(r.data.next, 'fetched');
-          const arr = [...posts];
-          r.data.results.forEach(element => {
-            arr.push(element)
-          });
-          setPosts(arr);
-          props.setPost(r.data.results);
+          // if(r.data.next){
+          //   setNext(r.data.next)
+          // }
+          // console.log(r.data.next, 'fetched');
+          // const arr = [...posts];
+          // console.log(r.data, 'data')
+          // setPosts(arr);
+          // props.setPost(arr);
           setLoading(false);
-          props.setLoading(false)
+          // props.setLoading(false);
+          // setFetch(false)
+          console.log(r.data.results);
+          const data = r.data.results;
+          const arr = [...posts]
+          data.map(i => arr.push(i))
+          setPosts(arr)
       })
       .catch(e => {
           console.log(e);
           setLoading(false);
-          props.setLoading(false)
+          props.setLoading(false);
+          setFetch(false)
       })
-    console.log('Hello world')
+    // console.log('Hello world')
   };
 
   const updateArray = (id) => {
@@ -90,11 +96,13 @@ function EveryOneScreen(props) {
 
   const reload = () => {
     const number = Math.random();
+    // console.log(number)
     props.setReload(number);
   }
 
   const fetchnewPosts = () => {
-    setFetch(true)
+    setFetch(true);
+    fetchPosts(next);
   }
 
   const newDiv = (
@@ -114,7 +122,7 @@ function EveryOneScreen(props) {
     </View>
   )
 
-  if(posts.length !== 0){
+  if(posts){
     container = (
       <Screen extraStyles={styles.ScreenExtraStyles}>
         <FlatList
@@ -135,8 +143,6 @@ function EveryOneScreen(props) {
         {fetch ? newDiv : null}
       </Screen>
     )
-  }else if(posts && posts.length === 0){
-    container = <EmptyDiv />
   }
 
   return (
