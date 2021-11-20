@@ -152,7 +152,7 @@ function SignupScreen2({changeScreen}) {
             <View style={styles.bottomContainer}>
                 <Text style={styles.bottomTextHeader}>Tell Us A Bit About Yourself</Text>
                 <View style={styles.inputContainer}>
-                    <DropDown name={inst} width={'55%'} data={institutions} onPress={onPress} />
+                    <DropDown  name={inst} width={'55%'} data={institutions} onPress={onPress} />
                     {div}
                     <TextInput placeholder='Department' style={styles.input} placeholderTextColor={'#000'} onChangeText={(text) => setDept(text) } />
                     <TextInput placeholder='Level' keyboardType='numeric' style={[styles.input, {width: 100}]} placeholderTextColor={'#000'} onChangeText={(text) => setLev(text)} />
@@ -225,7 +225,8 @@ const styles = StyleSheet.create({
         borderRadius: 7,
         paddingLeft: 15,
         fontSize: 17,
-        marginBottom: 15
+        marginBottom: 15,
+        color:'#000'
     },
     bottomNav: {
         height: 55,

@@ -19,6 +19,7 @@ import Icons from 'react-native-vector-icons/Ionicons';
 import Icons2 from 'react-native-vector-icons/FontAwesome5';
 import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
 import SearchScreen from '../SCREENS/SearchScreen';
+import LottieView from 'lottie-react-native';
 
 const iconConfig = {
   // color:colors.brandColor,
@@ -54,11 +55,16 @@ export default function InsideApp() {
           tabBarColor: '#009387',
           tabBarIcon: ({color, size, focused, style}) => (
             <View style={styles.iconView}>
-              <Icons
+              {/* <Icons
                 name="ios-heart-sharp"
                 color={focused ? colors.white : colors.brandColor}
                 size={focused ? scale(20) : size}
                 style={focused ? styles.iconFocused : styles.iconUnFocused}
+              /> */}
+              <LottieView source={require('../ASSETS/animation/heart.json')}
+              style={{width:focused?59+40:59,aspectRatio:1}}r
+              autoPlay={!focused?true:false}
+              loop={true}
               />
             </View>
           ),
@@ -86,11 +92,16 @@ export default function InsideApp() {
         options={{
           tabBarIcon: ({color, size, focused, style}) => (
             <View style={styles.iconView}>
-              <Icons2
+              {/* <Icons2
                 name="grin-hearts"
                 color={focused ? colors.white : colors.brandColor}
                 size={focused ? scale(20) : size}
                 style={focused ? styles.iconFocused : styles.iconUnFocused}
+              /> */}
+               <LottieView source={require('../ASSETS/animation/message.json')}
+              style={{width:focused?59+40:59,aspectRatio:1}}
+              autoPlay
+              loop
               />
             </View>
           ),

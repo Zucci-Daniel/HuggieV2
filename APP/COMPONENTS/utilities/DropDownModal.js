@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import colors from '../../config/colors';
 import DropDownItem from './DropDownItem';
 
-function DropDownModal({data, onPress}) {
+function DropDownModal({data, onPress,backDrop}) {
     const [item, setItem] = useState();
     useEffect(() => {
         if(data){
@@ -11,7 +12,7 @@ function DropDownModal({data, onPress}) {
     },[]); 
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} onPress={backDrop}>
             {item ? 
                 <View style={styles.mainContainer}>
                     <ScrollView>
@@ -29,14 +30,14 @@ const styles = StyleSheet.create({
     container: {
         height: '100%',
         width: '100%',
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        backgroundColor: colors.brandColor,
         position: 'absolute',
         top: 0,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     mainContainer: {
-        width: '80%',
+        width: '95%',
         backgroundColor: '#fff',
         borderRadius: 15,
         paddingTop: 20,

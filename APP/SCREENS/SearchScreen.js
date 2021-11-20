@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, Image, TextInput, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Text, Image, TextInput, TouchableWithoutFeedback, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Search from '../ASSETS/lens.png'
@@ -98,8 +98,9 @@ function SearchScreen({closeDiv}) {
 
     return (
         <View style={styles.container}>
+            <View style={styles.containerWrapper}>
             <View style={styles.canva}>
-                <Image source={Search} style={styles.img2} />
+                {/* <Image source={Search} style={styles.img2} /> */}
             </View>
             <View style={styles.mainContainer}>
                 <View style={styles.header}>
@@ -126,6 +127,7 @@ function SearchScreen({closeDiv}) {
                 </TouchableWithoutFeedback>
             </View>
             {items ? <DropDownModal data={items} onPress={drop1} /> : null}
+            </View>
         </View>
     );
 }
@@ -135,6 +137,7 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
         backgroundColor: '#fff',
+        paddingHorizontal:'4%'
     },
     canva: {
         height: '100%',
@@ -187,40 +190,39 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 17,
         opacity: 0.7,
-        marginLeft: 20,
         marginBottom: 10
     },
     row: {
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     Div2: {
         width: '100%',
-        marginTop: 30
+        marginTop: 30,
     },
     input: {
         height: 45,
         width: 200,
         backgroundColor: '#f0f0f0',
-        marginLeft: '7%',
         borderRadius: 7,
         paddingLeft: 15,
         fontSize: 16,
         marginBottom: 15,
-        letterSpacing: 1.5
+        letterSpacing: 1.5,
+        color:'#000'
     },
     continueBtn: {
         height: 50,
-        width: '100%',
         position: 'absolute',
-        bottom: 30,
+        bottom: 60,
+        right:Dimensions.get('window').width / 3,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     continueText: {
         fontWeight: 'bold',
         color: '#DE5295',
         fontSize: 19,
-        letterSpacing: 2
+        letterSpacing: 2,
     }
 })
 

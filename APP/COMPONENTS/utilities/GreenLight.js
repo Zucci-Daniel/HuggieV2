@@ -1,14 +1,20 @@
 import React from 'react'
 import { StyleSheet, TouchableNativeFeedback, View } from 'react-native'
 import colors from '../../config/colors'
-
+import LottieView from 'lottie-react-native'
 export default function GreenLight({onPress,extraFadedStyle,extraGreenLightStyle}) {
     return (
         <TouchableNativeFeedback  onPress={onPress}>
-        <View style={[styles.greenlightFaded,extraFadedStyle]}>    
+        {/* <View style={[styles.greenlightFaded,extraFadedStyle]}>    
         <View style={[styles.greenlight,extraGreenLightStyle]}>    
         </View>
-        </View>
+        </View> */}
+          <LottieView
+        source={require('../../ASSETS/animation/greenLight.json')}
+        style={{width: 100, aspectRatio: 1}}
+        autoPlay
+        loop
+      />
         </TouchableNativeFeedback>
     )
 }
