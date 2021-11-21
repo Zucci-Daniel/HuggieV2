@@ -31,9 +31,21 @@ import Animated, {
 } from 'react-native-reanimated';
 import axios from 'axios';
 import EmptyDiv from '../COMPONENTS/EmptyDiv';
+import Toast from "react-native-toast-message";
+
 
 
 function HotlistsScreen(props) {
+  
+
+  React.useEffect(() => {
+    Toast.show({
+      type: 'brandToast',
+      text2: 'DOUBLE TAP TO SEND A DATE💌 REQUEST 😉',
+      topOffset: Dimensions.get('window').height / 3,
+    });
+  }, []);
+
   const AnimatedView = Animated.createAnimatedComponent(View);
 
   const scale = useSharedValue(0);
@@ -115,6 +127,7 @@ function HotlistsScreen(props) {
                   {[users.attribute_1, users.attribute_2, users.attribute_3, users.attribute_4, users.attribute_5].map((like, index) => (
                     <SelectBox key={index} likes={like} />
                   ))}
+                  {/* <Button title="show Toast" /> */}
                 </CompleteHotScreen>
               </View>
             ))}

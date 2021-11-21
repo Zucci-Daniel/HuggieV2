@@ -64,6 +64,8 @@ const UserProfileScreen = gestureHandlerRootHOC(function TheMain({
   dept,
   level,
   children,
+  verified
+
 }) {
   const middle = useRef();
   const [showModal, setShowModal] = useState(false);
@@ -117,6 +119,7 @@ const UserProfileScreen = gestureHandlerRootHOC(function TheMain({
         </HotGallery>
         <Screen innerRef={middle} extraStyles={styles.screenStyle}>
           <ProfileDisplay
+          verified={verified}
             image={image}
             username={username}
             dept={dept}
@@ -126,10 +129,7 @@ const UserProfileScreen = gestureHandlerRootHOC(function TheMain({
           </ProfileDisplay>
         </Screen>
         <HotDetails>
-          {/* <View style={styles.buttons}>
-                <RedLight />
-                <GreenLight />
-              </View> */}
+
         </HotDetails>
       </ScrollView>
         <View style={styles.buttons}>

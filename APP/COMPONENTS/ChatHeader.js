@@ -26,7 +26,7 @@ const styles = ScaledSheet.create({
         padding: '3@s',
         paddingLeft: '5@s',
         display: 'flex',
-        alignItems: 'flex-start',
+        alignItems: 'center',
         flexDirection: 'row'
     },
     chatUserNameHeader: {

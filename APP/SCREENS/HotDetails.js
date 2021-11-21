@@ -5,7 +5,7 @@ import colors from '../config/colors'
 export default function HotDetails({ children, data}) {
     return (
         <View style={styles.container}>
-            <View style={styles.titleWrapper}>
+            {/* <View style={styles.titleWrapper}>
                 <Text 
                 style={styles.occupation}
                 >CEO, Founder of leena's kitchen</Text>
@@ -20,7 +20,8 @@ export default function HotDetails({ children, data}) {
                 style={styles.bio}
                 >{data[1]}</Text>
 
-                {children}
+                {children} */}
+                <Text>Working</Text>
         </View>
     )
 }

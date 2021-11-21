@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
         color: '#000',
         paddingLeft: 15,
         letterSpacing : 1,
-        width: '85%'
+        width: '85%',
+        color:'#000'
     },
     circle: {
         height: 17,

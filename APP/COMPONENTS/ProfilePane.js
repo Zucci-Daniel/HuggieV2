@@ -11,7 +11,9 @@ import { scale, ScaledSheet } from 'react-native-size-matters';
 
 export default function ProfilePane({ profilePicture, profileName, title, date, messages, onPress,lightColor,department,level }) {
     return (
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity
+    activeOpacity={0}
+        onPress={onPress}>
             <View style={styles.profilePane}>
                 <View style={styles.firstPane}>
                     <View style={styles.profilePicture}>
