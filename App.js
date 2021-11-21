@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 import reducer from './APP/Redux/Reducers/reducer';
 import MainScreen from './APP/SCREENS/MainScreen';
 import SplashScreen from 'react-native-splash-screen';
-import Toast, { InfoToast } from 'react-native-toast-message';
+import Toast, {InfoToast} from 'react-native-toast-message';
 import colors from './APP/config/colors';
 /////////////    redux settings     ///////////////////
 
@@ -22,11 +22,11 @@ const App = () => {
   }, []);
 
   const toastConfig = {
-    brandToast: ({ text2, props, ...rest }) => (
+    brandToast: ({text2, props, ...rest}) => (
       <View style={styles.customToast}>
         <Text style={styles.customText}>{text2}</Text>
       </View>
-    )
+    ),
   };
 
   return (
@@ -41,19 +41,19 @@ const styles = StyleSheet.create({
   GestureHandlerRootView: {
     flex: 1,
   },
-  customToast:{
-    backgroundColor:colors.brandColor,
-    borderRadius:3,
-    padding:15,
-    paddingVertical:30,
-    border:2,
-    borderWidth:3,
-    borderColor:colors.white
+  customToast: {
+    backgroundColor: colors.brandColor,
+    borderRadius: 3,
+    padding: 15,
+    paddingVertical: 30,
+    border: 2,
+    borderWidth: 3,
+    borderColor: colors.white,
   },
-  customText:{
-    fontWeight:'bold',
-    color:colors.white
-  }
+  customText: {
+    fontWeight: 'bold',
+    color: colors.white,
+  },
 });
 
 export default App;
